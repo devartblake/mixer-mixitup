@@ -76,9 +76,8 @@ namespace MixItUp.Base.MixerAPI
                 }
             }
 
-            this.skillCatalog = await ChannelSession.Connection.GetSkillCatalog(ChannelSession.Channel);
-
             // Hacky workaround until auth issue is fixed for Skill Catalog
+            // this.skillCatalog = await ChannelSession.Connection.GetSkillCatalog(ChannelSession.Channel);
             try
             {
                 using (HttpClient httpClient = new HttpClient())
@@ -465,7 +464,7 @@ namespace MixItUp.Base.MixerAPI
         {
             await this.RunEventCommand(this.FindMatchingEventCommand(EnumHelper.GetEnumName(OtherEventTypeEnum.MixerSkillUsed)), skill.User, skill.GetSpecialIdentifiers());
         }
-        
+
         private async void GlobalEvents_OnChatMessageReceived(object sender, ChatMessageViewModel message)
         {
             if (!message.IsWhisper && !message.IsAlert)

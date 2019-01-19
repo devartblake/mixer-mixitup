@@ -3,7 +3,6 @@ using Mixer.Base.Model.Chat;
 using Mixer.Base.Model.User;
 using Mixer.Base.Util;
 using MixItUp.Base.Commands;
-using MixItUp.Base.MixerAPI.Models;
 using MixItUp.Base.Model.Skill;
 using MixItUp.Base.Model.User;
 using MixItUp.Base.Util;
@@ -723,11 +722,11 @@ namespace MixItUp.Base.MixerAPI
                 this.OnMessageOccurred(sender, message);
                 if (message.IsChatSkill && message.IsInUsersChannel)
                 {
-                    if (ChatSkillModelWrapper.IsSparksChatSkill(message.ChatSkill))
+                    if (SkillUsageModel.IsSparksChatSkill(message.ChatSkill))
                     {
                         GlobalEvents.SparkUseOccurred(new Tuple<UserViewModel, int>(message.User, (int)message.ChatSkill.cost));
                     }
-                    else if (ChatSkillModelWrapper.IsEmbersChatSkill(message.ChatSkill)
+                    else if (SkillUsageModel.IsEmbersChatSkill(message.ChatSkill))
                     {
                         GlobalEvents.EmberUseOccurred(new UserEmberUsageModel(message.User, (int)message.ChatSkill.cost, message.Message));
                     }

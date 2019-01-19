@@ -667,14 +667,7 @@ namespace MixItUp.WPF.Controls.MainControls
             if (!string.IsNullOrEmpty(this.ChatMessageTextBox.Text))
             {
                 string message = this.ChatMessageTextBox.Text;
-
-                if (message.Contains(SpecialIdentifierStringBuilder.SpecialIdentifierHeader))
-                {
-                    SpecialIdentifierStringBuilder spReplacement = new SpecialIdentifierStringBuilder(message, Guid.NewGuid());
-                    await spReplacement.ReplaceCommonSpecialModifiers(await ChannelSession.GetCurrentUser());
-                    message = spReplacement.ToString();
-                }
-
+                                
                 if (messageHistory.Contains(message))
                 {
                     // Remove so we can move to the end
