@@ -32,7 +32,7 @@
             <Util:LocalizationConverter x:Key="LocalizationConverter" />
         </Grid.Resources>
         <Grid.Background>
-            <ImageBrush ImageSource="Blue_Grunge.jpg" Stretch="UniformToFill"/>
+            <ImageBrush Stretch="UniformToFill" ImageSource="Assets/Images/Blue_Grunge_02.jpg"/>
         </Grid.Background>
 
         <Grid.RowDefinitions>

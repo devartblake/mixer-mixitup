@@ -27,12 +27,12 @@ namespace MixItUp.WPF.Controls.Actions
                 this.Value2TextBox.Text = this.action.Value2;
                 if (this.action.ComparisionType == ConditionalComparisionTypeEnum.Between)
                 {
-                    this.Value2TextBox.Text = this.action.Value2;
+                    this.MinValue2TextBox.Text = this.action.Value2;
+                    this.MaxValue3TextBox.Text = this.action.Value3;
                 }
                 else
                 {
-                    this.MinValue2TextBox.Text = this.action.Value2;
-                    this.MaxValue3TextBox.Text = this.action.Value3;
+                    this.Value2TextBox.Text = this.action.Value2;
                 }
                 this.CommandReference.Command = this.action.GetCommand();
             }

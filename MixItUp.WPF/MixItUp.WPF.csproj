@@ -783,7 +783,7 @@
     </Compile>
     <Compile Include="Util\InstalledFonts.cs" />
     <Compile Include="Util\LocalizationConverter.cs" />
-    <Compile Include="Util\LogicalTreeHelpers.cs"/>
+    <Compile Include="Util\LogicalTreeHelpers.cs" />
     <Compile Include="Util\MessageBoxHelper.cs" />
     <Compile Include="Util\VisualTreeHelpers.cs" />
     <Compile Include="Windows\Command\CommandWindow.xaml.cs">
@@ -1755,9 +1755,7 @@
     <Resource Include="AutoUpdater.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Hexagon.png" />
     <Resource Include="LICENSE.txt" />
-    <Resource Include="Mixer.png" />
     <Resource Include="Assets\Images\Discord.png" />
     <Resource Include="Assets\Images\Youtube.png" />
     <Resource Include="Assets\Images\Wiki.png" />
@@ -1781,6 +1779,10 @@
     </Resource>
     <Resource Include="Assets\Images\Embers.png" />
     <Resource Include="Assets\Images\Sparks.png" />
+    <Resource Include="Assets\Images\Blue_Grunge_01.jpg" />
+    <Resource Include="Assets\Images\Blue_Grunge_02.jpg" />
+    <Resource Include="Assets\Images\Lights.jpg" />
+    <Resource Include="Assets\Images\Waterdrops.jpg" />
     <Content Include="Assets\Sounds\Ariel.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1835,8 +1837,6 @@
     <Content Include="Assets\Sounds\Watch Alarm.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Blue_Grunge.jpg" />
-    <Resource Include="Carbon_Fiber.jpg" />
     <Content Include="Changelog.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

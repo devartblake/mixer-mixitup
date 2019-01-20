@@ -68,6 +68,7 @@
                                             <MaterialDesign:PackIcon Kind="Settings" Height="24" Width="24" Margin="-13,-10" Foreground="{StaticResource WhiteColor}" />
                                         </Button>
 
+                                        
                                     </StackPanel>
                                 </Grid>
                             </MaterialDesign:ColorZone>
