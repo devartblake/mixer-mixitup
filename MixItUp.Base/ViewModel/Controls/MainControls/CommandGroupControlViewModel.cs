@@ -12,7 +12,7 @@ namespace MixItUp.Base.ViewModel.Controls.MainControls
 
         public bool IsEnabled
         {
-            get { return this.Commands.Any(c => c.IsEnabled; }
+            get { return this.Commands.Any(c => c.IsEnabled); }
             set
             {
                 bool newIsEnabledState = !this.IsEnabled;
