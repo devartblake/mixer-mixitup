@@ -34,6 +34,10 @@
     </local:MainControlBase.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
         <GroupBox Grid.Row="0">
             <GroupBox.Header>
                 <Grid>
@@ -134,11 +138,6 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <ComboBox x:Name="SendChatAsComboBox" Grid.Column="1" MaterialDesign:HintAssist.Hint="Send As" Width="80" />
-
-                        <TextBox x:Name="ChatMessageTextBox" Grid.Column="3" TextChanged="ChatMessageTextBox_TextChanged" PreviewKeyDown="ChatMessageTextBox_PreviewKeyDown" KeyDown="ChatMessageTextBox_KeyDown" MaterialDesign:HintAssist.Hint="Chat Message" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-
-                        <Button x:Name="SendChatMessageButton" Grid.Column="4" Width="70" Click="SendChatMessageButton_Click">Send</Button>
                     </Grid>
                 </Grid>
 
@@ -174,5 +173,47 @@
                 </Grid>
             </MaterialDesign:PopupBox>
         </Canvas>
+
+        <MaterialDesign:ColorZone Mode="PrimaryMid" Grid.Row="1" CornerRadius="3" MaterialDesign:ShadowAssist.ShadowDepth="Depth2">
+            <StackPanel Orientation="Horizontal" Margin="8">
+                <Border Background="Navy" MaxHeight="40" CornerRadius="3" ToolTip="Send As">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox x:Name="SendChatAsComboBox" Grid.Column="1" MaterialDesign:HintAssist.Hint="Send As" Width="100" />
+                    </Grid>
+                </Border>
+
+                <MaterialDesign:ColorZone Mode="PrimaryLight" CornerRadius="2" MaterialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="8 0 0 0" >
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Border Background="White" MaxHeight="40" CornerRadius="3">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="1" x:Name="ChatMessageTextBox" TextChanged="ChatMessageTextBox_TextChanged"
+                                         PreviewKeyDown="ChatMessageTextBox_PreviewKeyDown"
+                                         KeyDown="ChatMessageTextBox_KeyDown"
+                                         MaterialDesign:HintAssist.Hint="Chat Message"
+                                         MaterialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" MinWidth="560" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        
+                    </StackPanel>
+                    
+                </MaterialDesign:ColorZone>                
+                <Button x:Name="SendChatMessageButton" Grid.Column="4" Width="90" Margin="8 0 0 0" Click="SendChatMessageButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <MaterialDesign:PackIcon Kind="Send"/>
+                        <TextBlock Text="Send" Margin="4 0 0 0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </MaterialDesign:ColorZone>
     </Grid>
 </local:MainControlBase>
