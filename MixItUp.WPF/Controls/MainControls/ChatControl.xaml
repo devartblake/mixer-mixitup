@@ -174,8 +174,8 @@
             </MaterialDesign:PopupBox>
         </Canvas>
 
-        <MaterialDesign:ColorZone Mode="PrimaryMid" Grid.Row="1" CornerRadius="3" MaterialDesign:ShadowAssist.ShadowDepth="Depth2">
-            <StackPanel Orientation="Horizontal" Margin="8">
+        <MaterialDesign:ColorZone Mode="PrimaryMid" Grid.Row="1" Width="Auto" CornerRadius="3" MaterialDesign:ShadowAssist.ShadowDepth="Depth2">
+            <StackPanel Orientation="Horizontal" Margin="10 5 10 5">
                 <Border Background="Navy" MaxHeight="40" CornerRadius="3" ToolTip="Send As">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -187,7 +187,7 @@
                     </Grid>
                 </Border>
 
-                <MaterialDesign:ColorZone Mode="PrimaryLight" CornerRadius="2" MaterialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="8 0 0 0" >
+                <MaterialDesign:ColorZone Mode="PrimaryLight" CornerRadius="2" Width="Auto" MaterialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="8 0 0 0" >
                     <StackPanel Orientation="Horizontal" Margin="3">
                         <Border Background="White" MaxHeight="40" CornerRadius="3">
                             <Grid>

@@ -16,7 +16,7 @@
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"      
 
         Icon="./Logo.ico"
-        Title="Mix It Up - Login" Height="720" Width="375">
+        Title="Mix It Up - Login" Height="480" Width="870">
     <Windows:LoadingWindowBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -40,10 +40,14 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
 
         <MaterialDesign:DialogHost x:Name="MDDialogHost" Identifier="RootDialog" />
 
-        <Grid Grid.Row="0" HorizontalAlignment="Center" Width="Auto">
+        <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Width="Auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -52,14 +56,19 @@
             <Image Source="Logo.png" Margin="0,10,0,-10"/>
         </Grid>
 
-        <Grid Grid.Row="1" Margin="10,10" HorizontalAlignment="Center">
+        <Grid Grid.Row="0" Grid.Column="1" Margin="10,10" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="200" />
                 <RowDefinition Height="200" />
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <GroupBox Grid.Row="0" Header="Streamer" Margin="0,10,0,10" Width="320">
+            <GroupBox Grid.Row="0" Grid.Column="0" Header="Streamer" Margin="0,10,0,10" Width="320">
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -73,7 +82,7 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Grid.Row="1" Header="Moderator" Margin="0,10,0,10" Width="320">
+            <GroupBox Grid.Row="0" Grid.Column="1" Header="Moderator" Margin="0,10,0,10" Width="320">
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
