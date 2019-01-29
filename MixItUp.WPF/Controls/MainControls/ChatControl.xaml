@@ -15,7 +15,7 @@
              FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"   
                           
              d:DesignHeight="600" d:DesignWidth="800">
-    <local:MainControlBase.Resources>
+    <local:MainControlBase.Resources>        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
@@ -30,6 +30,42 @@
                 <MenuItem x:Name="MessageUserInformationMenuItem" Header="User Info" Click="MessageUserInformationMenuItem_Click" />
             </ContextMenu>
 
+            <Style x:Key="SendButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid Background="#00000000">
+                                <MaterialDesign:PackIcon Name="SendChatMessageButton" Kind="Send" SnapsToDevicePixels="True"
+                                                     Foreground="{TemplateBinding Foreground}"
+                                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                     Margin="{TemplateBinding Padding}" Width="Auto" Height="Auto"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" TargetName="SendChatMessageButton" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter Property="Foreground" TargetName="SendChatMessageButton" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.23"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </local:MainControlBase.Resources>
 
@@ -176,7 +212,7 @@
 
         <MaterialDesign:ColorZone Mode="PrimaryMid" Grid.Row="1" Width="Auto" CornerRadius="3" MaterialDesign:ShadowAssist.ShadowDepth="Depth2">
             <StackPanel Orientation="Horizontal" Margin="10 5 10 5">
-                <Border Background="Navy" MaxHeight="40" CornerRadius="3" ToolTip="Send As">
+                <Border Background="Gray" MaxHeight="40" CornerRadius="3" ToolTip="Send As">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10" />
