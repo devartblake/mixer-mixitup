@@ -54,9 +54,6 @@ namespace MixItUp.Base.Util
 
         public const string MilestoneSpecialIdentifierHeader = "milestone";
 
-        public const string QuoteSpecialIdentifierHeader = "quote";
-        public const string QuoteNumberRegexSpecialIdentifier = QuoteSpecialIdentifierHeader + "\\d+";
-
         public const string CurrentSongIdentifierHeader = "currentsong";
         public const string NextSongIdentifierHeader = "nextsong";
 
@@ -199,15 +196,15 @@ namespace MixItUp.Base.Util
             SpecialIdentifierStringBuilder.RandomUserSpecialIdentifierGroups[id] = new RandomUserSpecialIdentiferGroup();
             IEnumerable<UserViewModel> users = await ChannelSession.ActiveUsers.GetAllWorkableUsers();
             users = users.Where(u => !u.ID.Equals(ChannelSession.User.id));
-            if (users.Count() > 0)
+            if (users != null && users.Count() > 0)
             {
                 SpecialIdentifierStringBuilder.RandomUserSpecialIdentifierGroups[id].RandomUser = users.ElementAt(RandomHelper.GenerateRandomNumber(users.Count()));
                 users = users.Where(u => u.IsFollower);
-                if (users.Count() > 0)
+                if (users != null && users.Count() > 0)
                 {
                     SpecialIdentifierStringBuilder.RandomUserSpecialIdentifierGroups[id].RandomFollower = users.ElementAt(RandomHelper.GenerateRandomNumber(users.Count()));
                     users = users.Where(u => u.HasPermissionsTo(MixerRoleEnum.Subscriber));
-                    if (users.Count() > 0)
+                    if (users != null && users.Count() > 0)
                     {
                         SpecialIdentifierStringBuilder.RandomUserSpecialIdentifierGroups[id].RandomSubscriber = users.ElementAt(RandomHelper.GenerateRandomNumber(users.Count()));
                     }
@@ -400,28 +397,6 @@ namespace MixItUp.Base.Util
                 }
             }
 
-            if (this.ContainsSpecialIdentifier(QuoteSpecialIdentifierHeader) && ChannelSession.Settings.QuotesEnabled && ChannelSession.Settings.UserQuotes.Count > 0)
-            {
-                UserQuoteViewModel quote = ChannelSession.Settings.UserQuotes.PickRandom();
-                if (quote != null)
-                {
-                    this.ReplaceSpecialIdentifier(QuoteSpecialIdentifierHeader + "random", quote.ToString());
-                }
-
-                if (this.ContainsRegexSpecialIdentifier(QuoteNumberRegexSpecialIdentifier))
-                {
-                    await this.ReplaceNumberBasedRegexSpecialIdentifier(QuoteNumberRegexSpecialIdentifier, (index) =>
-                    {
-                        if (index > 0 && index <= ChannelSession.Settings.UserQuotes.Count)
-                        {
-                            index--;
-                            return Task.FromResult(ChannelSession.Settings.UserQuotes[index].ToString());
-                        }
-                        return Task.FromResult<string>(null);
-                    });
-                }
-            }
-        
             if (this.ContainsSpecialIdentifier(CostreamUsersSpecialIdentifier))
             {
                 this.ReplaceSpecialIdentifier(CostreamUsersSpecialIdentifier, await CostreamChatCommand.GetCostreamUsers());
@@ -550,7 +525,7 @@ namespace MixItUp.Base.Util
                         }
 
                         IEnumerable<PatronageMilestoneModel> patronageMilestonesEarned = patronageMilestones.Where(m => m.target <= patronageStatus.patronageEarned);
-                        if (patronageMilestonesEarned.Count() > 0)
+                        if (patronageMilestonesEarned != null && patronageMilestonesEarned.Count() > 0)
                         {
                             PatronageMilestoneModel patronageMilestoneHighestEarned = patronageMilestonesEarned.OrderByDescending(m => m.reward).FirstOrDefault();
                             if (patronageMilestoneHighestEarned != null)
@@ -697,23 +672,27 @@ namespace MixItUp.Base.Util
                 await this.ReplaceNumberBasedRegexSpecialIdentifier(SpecialIdentifierStringBuilder.TopSparksUsedRegexSpecialIdentifierHeader + timeFrame, async (total) =>
                 {
                     IEnumerable<SparksLeaderboardModel> leaderboards = await func(total);
-                    leaderboards = leaderboards.OrderByDescending(l => l.statValue);
-
-                    List<string> leaderboardsList = new List<string>();
-                    int position = 1;
-                    for (int i = 0; i < total && i < leaderboards.Count(); i++)
+                    if (leaderboards != null && leaderboards.Count() > 0)
                     {
-                        SparksLeaderboardModel leaderboard = leaderboards.ElementAt(i);
-                        leaderboardsList.Add($"#{i + 1}) {leaderboard.username} - {leaderboard.statValue}");
-                        position++;
-                    }
+                        leaderboards = leaderboards.OrderByDescending(l => l.statValue);
 
-                    string result = "No users found.";
-                    if (leaderboardsList.Count > 0)
-                    {
-                        result = string.Join(", ", leaderboardsList);
+                        List<string> leaderboardsList = new List<string>();
+                        int position = 1;
+                        for (int i = 0; i < total && i < leaderboards.Count(); i++)
+                        {
+                            SparksLeaderboardModel leaderboard = leaderboards.ElementAt(i);
+                            leaderboardsList.Add($"#{i + 1}) {leaderboard.username} - {leaderboard.statValue}");
+                            position++;
+                        }
+
+                        string result = "No users found.";
+                        if (leaderboardsList.Count > 0)
+                        {
+                            result = string.Join(", ", leaderboardsList);
+                        }
+                        return result;
                     }
-                    return result;
+                    return null;
                 });
             }
         }
@@ -725,23 +704,27 @@ namespace MixItUp.Base.Util
                 await this.ReplaceNumberBasedRegexSpecialIdentifier(SpecialIdentifierStringBuilder.TopEmbersUsedRegexSpecialIdentifierHeader + timeFrame, async (total) =>
                 {
                     IEnumerable<EmbersLeaderboardModel> leaderboards = await func(total);
-                    leaderboards = leaderboards.OrderByDescending(l => l.statValue);
-
-                    List<string> leaderboardsList = new List<string>();
-                    int position = 1;
-                    for (int i = 0; i < total && i < leaderboards.Count(); i++)
+                    if (leaderboards != null && leaderboards.Count() > 0)
                     {
-                        EmbersLeaderboardModel leaderboard = leaderboards.ElementAt(i);
-                        leaderboardsList.Add($"#{i + 1}) {leaderboard.username} - {leaderboard.statValue}");
-                        position++;
-                    }
+                        leaderboards = leaderboards.OrderByDescending(l => l.statValue);
 
-                    string result = "No users found.";
-                    if (leaderboardsList.Count > 0)
-                    {
-                        result = string.Join(", ", leaderboardsList);
+                        List<string> leaderboardsList = new List<string>();
+                        int position = 1;
+                        for (int i = 0; i < total && i < leaderboards.Count(); i++)
+                        {
+                            EmbersLeaderboardModel leaderboard = leaderboards.ElementAt(i);
+                            leaderboardsList.Add($"#{i + 1}) {leaderboard.username} - {leaderboard.statValue}");
+                            position++;
+                        }
+
+                        string result = "No users found.";
+                        if (leaderboardsList.Count > 0)
+                        {
+                            result = string.Join(", ", leaderboardsList);
+                        }
+                        return result;
                     }
-                    return result;
+                    return null;
                 });
             }
         }
@@ -858,11 +841,7 @@ namespace MixItUp.Base.Util
                 string text = new String(match.Value.Where(c => char.IsDigit(c)).ToArray());
                 if (int.TryParse(text, out int number))
                 {
-                    string replacement = await replacer(number);
-                    if (replacement != null)
-                    {
-                        this.ReplaceSpecialIdentifier(match.Value, replacement, includeSpecialIdentifierHeader: false);
-                    }
+                    this.ReplaceSpecialIdentifier(match.Value, await replacer(number), includeSpecialIdentifierHeader: false);
                 }
             }
         }
