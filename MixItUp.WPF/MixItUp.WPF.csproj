@@ -1841,6 +1841,10 @@
       <Project>{ce3896dc-cc98-42ba-9bf7-4073dcc6a393}</Project>
       <Name>MixItUp.Reporter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MixItUp.SignalR.Client\MixItUp.SignalR.Client.csproj">
+      <Project>{8144a52c-2a76-44f0-96f0-3c1770cc8c50}</Project>
+      <Name>MixItUp.SignalR.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\obs-websocket-dotnet\obs-websocket-dotnet.csproj">
       <Project>{c8668815-f21e-49c0-8f1a-58bc698153af}</Project>
       <Name>obs-websocket-dotnet</Name>
