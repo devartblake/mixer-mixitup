@@ -1,11 +1,12 @@
 ﻿using MixItUp.Base.Commands;
+using MixItUp.Base.ViewModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MixItUp.Base.ViewModel.Controls.MainControls
 {
-    public class CommandGroupControlViewModel : ViewModelBase
+    public class CommandGroupControlViewModel : NotifyPropertyChangedViewModelBase
     {        
         public CommandGroupSettings GroupSettings { get; set; }
 
@@ -37,7 +38,7 @@ namespace MixItUp.Base.ViewModel.Controls.MainControls
                         command.IsEnabled = newIsEnabledState;
                     }
                 }
-                this.NotifyPropertyChanged();
+                this.OnPropertyChanged();
             }
         }
         
@@ -49,7 +50,7 @@ namespace MixItUp.Base.ViewModel.Controls.MainControls
             set
             {
                 this.commands = value;
-                this.NotifyPropertyChanged();
+                this.OnPropertyChanged();
             }
         }
         private ObservableCollection<CommandBase> commands = new ObservableCollection<CommandBase>();

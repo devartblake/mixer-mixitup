@@ -136,7 +136,8 @@ namespace MixItUp.WPF.Controls.Command
 
                 this.command.IncludeExclamationInCommands = this.IncludeExclamationInCommandsToggleButton.IsChecked.GetValueOrDefault();
                 this.command.Unlocked = this.UnlockedControl.Unlocked;
-                this.command.GroupName = this.CommandGroupComboBox.Text;
+
+                this.command.GroupName = !string.IsNullOrEmpty(this.CommandGroupComboBox.Text) ? this.CommandGroupComboBox.Text : null;
                 if (!string.IsNullOrEmpty(this.CommandGroupComboBox.Text))
                 {
                     if (!ChannelSession.Settings.CommandGroups.ContainsKey(this.CommandGroupComboBox.Text))
