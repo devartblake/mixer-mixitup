@@ -1,27 +1,23 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace MixItUp.Base.Model.Remote
+namespace MixItUp.Base.Model.Remote.Authentication
 {
     [DataContract]
-    public class RemoteDeviceModel
+    public class RemoteConnectionModel
     {
         [DataMember]
         public Guid ID { get; set; }
 
         [DataMember]
         public string Name { get; set; }
+        
+        public RemoteConnectionModel() { }
 
-        [DataMember]
-        public bool IsHost { get; set; }
-
-        public RemoteDeviceModel() { }
-
-        public RemoteDeviceModel(string name, bool isHost = false)
+        public RemoteConnectionModel(string name)
         {
             this.ID = Guid.NewGuid();
             this.Name = name;
-            this.IsHost = isHost;
         }
     }
 }
