@@ -61,6 +61,7 @@ namespace MixItUp.Base
 
             OAuthClientScopeEnum.channel__clip__create__self,
             OAuthClientScopeEnum.channel__details__self,
+            OAuthClientScopeEnum.channel__follow__self,
             OAuthClientScopeEnum.channel__update__self,
             OAuthClientScopeEnum.channel__analytics__self,
 
@@ -88,6 +89,8 @@ namespace MixItUp.Base
             OAuthClientScopeEnum.chat__timeout,
             OAuthClientScopeEnum.chat__view_deleted,
             OAuthClientScopeEnum.chat__whisper,
+
+            OAuthClientScopeEnum.channel__follow__self,
 
             OAuthClientScopeEnum.user__details__self,
         };

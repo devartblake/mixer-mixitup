@@ -86,34 +86,34 @@ namespace MixItUp.Base.MixerAPI
             {
                 if (this.HasCooldown)
                 {
-                    this.Button.cooldown = this.CooldownTimestamp;
-                }
+                    this.Button.cooldown = this.CooldownTimestamp;               
 
-                Dictionary<InteractiveConnectedSceneModel, List<InteractiveConnectedButtonCommand>> sceneButtons = new Dictionary<InteractiveConnectedSceneModel, List<InteractiveConnectedButtonCommand>>();
+                    Dictionary<InteractiveConnectedSceneModel, List<InteractiveConnectedButtonCommand>> sceneButtons = new Dictionary<InteractiveConnectedSceneModel, List<InteractiveConnectedButtonCommand>>();
 
-                if (!string.IsNullOrEmpty(this.ButtonCommand.CooldownGroupName))
-                {
-                    var otherButtons = ChannelSession.Interactive.ControlCommands.Values.Where(c => c is InteractiveConnectedButtonCommand).Select(c => (InteractiveConnectedButtonCommand)c);
-                    otherButtons = otherButtons.Where(c => this.ButtonCommand.CooldownGroupName.Equals(c.ButtonCommand.CooldownGroupName));
-                    foreach (var otherItem in otherButtons)
+                    if (!string.IsNullOrEmpty(this.ButtonCommand.CooldownGroupName))
                     {
-                        otherItem.Button.cooldown = this.Button.cooldown;
-                        if (!sceneButtons.ContainsKey(otherItem.Scene))
+                        var otherButtons = ChannelSession.Interactive.ControlCommands.Values.Where(c => c is InteractiveConnectedButtonCommand).Select(c => (InteractiveConnectedButtonCommand)c);
+                        otherButtons = otherButtons.Where(c => this.ButtonCommand.CooldownGroupName.Equals(c.ButtonCommand.CooldownGroupName));
+                        foreach (var otherItem in otherButtons)
                         {
-                            sceneButtons[otherItem.Scene] = new List<InteractiveConnectedButtonCommand>();
-                        }
-                        sceneButtons[otherItem.Scene].Add(otherItem);
+                            otherItem.Button.cooldown = this.Button.cooldown;
+                            if (!sceneButtons.ContainsKey(otherItem.Scene))
+                            {
+                                sceneButtons[otherItem.Scene] = new List<InteractiveConnectedButtonCommand>();
+                            }
+                            sceneButtons[otherItem.Scene].Add(otherItem);
+                        }                        
                     }
-                }
-                else
-                {
-                    sceneButtons[this.Scene] = new List<InteractiveConnectedButtonCommand>();
-                    sceneButtons[this.Scene].Add(this);
-                }
+                    else
+                    {
+                        sceneButtons[this.Scene] = new List<InteractiveConnectedButtonCommand>();
+                        sceneButtons[this.Scene].Add(this);
+                    }
 
-                foreach (var kvp in sceneButtons)
-                {
-                    await ChannelSession.Interactive.UpdateControls(kvp.Key, kvp.Value.Select(b => b.Button));
+                    foreach (var kvp in sceneButtons)
+                    {
+                        await ChannelSession.Interactive.UpdateControls(kvp.Key, kvp.Value.Select(b => b.Button));
+                    }
                 }
             }
         }
@@ -205,6 +205,8 @@ namespace MixItUp.Base.MixerAPI
 
         private List<InteractiveGameModel> games = new List<InteractiveGameModel>();
         private DateTimeOffset lastRefresh = DateTimeOffset.MinValue;
+
+        private SemaphoreSlim giveInputLock = new SemaphoreSlim(1);
 
         public InteractiveClientWrapper()
         {
@@ -865,49 +867,51 @@ namespace MixItUp.Base.MixerAPI
                         return;
                     }
 
-                    if (connectedControl != null && !await connectedControl.CheckAllRequirements(user))
+                    if (connectedControl != null )
                     {
-                        return;
-                    }
-
-                    if (!string.IsNullOrEmpty(e.transactionID) && !user.Data.IsSparkExempt)
-                    {
-                        Util.Logger.LogDiagnostic("Sending Spark Transaction Capture - " + e.transactionID);
-
-                        await this.CaptureSparkTransaction(e.transactionID);
-
                         int sparkCost = 0;
-                        if (control is InteractiveButtonControlModel)
+
+                        await this.giveInputLock.WaitAndRelease(async () =>
                         {
-                            sparkCost = ((InteractiveButtonControlModel)control).cost.GetValueOrDefault();
-                        }
-                        else if (control is InteractiveTextBoxControlModel)
-                        {
-                            sparkCost = ((InteractiveTextBoxControlModel)control).cost.GetValueOrDefault();
-                        }
+                            if (await connectedControl.CheckAllRequirements(user))
+                            {
+                                if (!string.IsNullOrEmpty(e.transactionID) && !user.Data.IsSparkExempt)
+                                {
+                                    Util.Logger.LogDiagnostic("Sending Spark Transaction Capture - " + e.transactionID);
+
+                                    await this.CaptureSparkTransaction(e.transactionID);
+
+                                    if (control is InteractiveButtonControlModel)
+                                    {
+                                        sparkCost = ((InteractiveButtonControlModel)control).cost.GetValueOrDefault();
+                                    }
+                                    else if (control is InteractiveTextBoxControlModel)
+                                    {
+                                        sparkCost = ((InteractiveTextBoxControlModel)control).cost.GetValueOrDefault();
+                                    }
+                                }
+
+                                List<string> arguments = new List<string>();
+
+                                if(connectedControl is InteractiveConnectedJoystickCommand)
+                                {
+                                    arguments.Add(e.input.x.ToString());
+                                    arguments.Add(e.input.y.ToString());
+                                }
+                                else if (connectedControl is InteractiveConnectedTextBoxCommand)
+                                {
+                                    arguments.Add(e.input.value);
+                                }
+
+                                await connectedControl.Perform(user, arguments);
+                            }
+                        });
 
                         if (sparkCost > 0)
                         {
                             GlobalEvents.SparkUseOccurred(new Tuple<UserViewModel, int>(user, sparkCost));
                         }
-                    }
-
-                    if (connectedControl != null)
-                    {
-                        List<string> arguments = new List<string>();
-
-                        if (connectedControl is InteractiveConnectedJoystickCommand)
-                        {
-                            arguments.Add(e.input.x.ToString());
-                            arguments.Add(e.input.y.ToString());
-                        }
-                        else if (connectedControl is InteractiveConnectedTextBoxCommand)
-                        {
-                            arguments.Add(e.input.value);
-                        }
-
-                        await connectedControl.Perform(user, arguments);
-                    }
+                    }                                       
 
                     this.OnGiveInput(this, e);
 
