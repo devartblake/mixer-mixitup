@@ -65,9 +65,9 @@ namespace MixItUp.Base.Services
 
         Task SendProfiles(IEnumerable<RemoteProfileModel> profiles);
 
-        Task SendProfileBoard(RemoteProfileBoardModel profileBoard);
-
         Task RequestProfileBoard(Guid profileID);
+
+        Task SendProfileBoard(RemoteProfileBoardModel profileBoard);
 
         Task SendCommand(Guid commandID);
     }

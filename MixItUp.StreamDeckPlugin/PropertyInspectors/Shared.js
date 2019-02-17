@@ -1,4 +1,4 @@
-var websocket = null,
+﻿var websocket = null,
     uuid = null,
     actionInfo = {},
     inInfo = {},
@@ -127,20 +127,24 @@ function addDynamicStyles(clrs) {
 
     node.setAttribute('id', 'sdpi-dynamic-styles');
     node.innerHTML = `
+
     input[type="radio"]:checked + label span,
     input[type="checkbox"]:checked + label span {
         background-color: ${clrs.highlightColor};
     }
+
     input[type="radio"]:active:checked + label span,
     input[type="radio"]:active + label span,
     input[type="checkbox"]:active:checked + label span,
     input[type="checkbox"]:active + label span {
       background-color: ${clrs.mouseDownColor};
     }
+
     input[type="radio"]:active + label span,
     input[type="checkbox"]:active + label span {
       background-color: ${clrs.buttonPressedBorderColor};
     }
+
     td.selected,
     td.selected:hover,
     li.selected:hover,
@@ -148,6 +152,7 @@ function addDynamicStyles(clrs) {
       color: white;
       background-color: ${clrs.highlightColor};
     }
+
     .sdpi-file-label > label:active,
     .sdpi-file-label.file:active,
     label.sdpi-file-label:active,
@@ -158,10 +163,12 @@ function addDynamicStyles(clrs) {
       color: ${clrs.buttonPressedTextColor};
       border-color: ${clrs.buttonPressedBorderColor};
     }
+
     ::-webkit-progress-value,
     meter::-webkit-meter-optimum-value {
         background: linear-gradient(${clr2}, ${clr1} 20%, ${clr} 45%, ${clr} 55%, ${clr2})
     }
+
     ::-webkit-progress-value:active,
     meter::-webkit-meter-optimum-value:active {
         background: linear-gradient(${clr}, ${clr2} 20%, ${metersActiveColor} 45%, ${metersActiveColor} 55%, ${clr})

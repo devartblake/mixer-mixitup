@@ -44,7 +44,7 @@ namespace MixItUp.WPF.Controls.MainControls
             {
                 this.Button = (InteractiveButtonControlModel)command.Control;
             }
-            else if(command.Control is InteractiveJoystickControlModel)
+            else if (command.Control is InteractiveJoystickControlModel)
             {
                 this.Joystick = (InteractiveJoystickControlModel)command.Control;
             }
@@ -223,6 +223,10 @@ namespace MixItUp.WPF.Controls.MainControls
             {
                 this.SetCustomInteractiveGame(new MixerPaintInteractiveControl(this.selectedGame, this.selectedGameVersion));
             }
+            else if (this.selectedGame.id == InteractiveSharedProjectModel.FlySwatter.GameID)
+            {
+                this.SetCustomInteractiveGame(new FlySwatterInteractiveControl(this.selectedGame, this.selectedGameVersion));
+            }
             else
             {
                 this.GroupsButton.IsEnabled = true;
@@ -348,11 +352,14 @@ namespace MixItUp.WPF.Controls.MainControls
 
         private async void GroupsButton_Click(object sender, RoutedEventArgs e)
         {
-            InteractiveSceneUserGroupsDialogControl dialogControl = new InteractiveSceneUserGroupsDialogControl(this.selectedGame, this.selectedScene);
-            await this.Window.RunAsyncOperation(async () =>
+            if (this.selectedGame != null && this.selectedScene != null)
             {
-                await MessageBoxHelper.ShowCustomDialog(dialogControl);
-            });
+                InteractiveSceneUserGroupsDialogControl dialogControl = new InteractiveSceneUserGroupsDialogControl(this.selectedGame, this.selectedScene);
+                await this.Window.RunAsyncOperation(async () =>
+                {
+                    await MessageBoxHelper.ShowCustomDialog(dialogControl);
+                });
+            }
         }
 
         private async void InteractiveGamesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

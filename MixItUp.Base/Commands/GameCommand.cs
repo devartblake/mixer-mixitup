@@ -995,7 +995,7 @@ namespace MixItUp.Base.Commands
                     {
                         return;
                     }
-                    
+
                     this.Requirements.TrySubtractInventoryAmount(user);
 
                     int randomNumber = this.GenerateProbability();

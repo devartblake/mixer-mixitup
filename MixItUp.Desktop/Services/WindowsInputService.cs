@@ -252,7 +252,6 @@ namespace MixItUp.Input
             return point;
         }
 
-
         private int GetHotKeyID(HotKeyModifiersEnum modifiers, InputKeyEnum key) { return (this.ConvertScanCodeToVirtualKey(key) << 16) | (int)modifiers; }
 
         private int ConvertScanCodeToVirtualKey(InputKeyEnum key) { return MapVirtualKey((uint)key, 3); }

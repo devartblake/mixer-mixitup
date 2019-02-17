@@ -12,6 +12,7 @@ namespace MixItUp.Base.Actions
     [DataContract]
     public class SpecialIdentifierAction : ActionBase
     {
+        private static Random random = new Random();
         private static SemaphoreSlim asyncSemaphore = new SemaphoreSlim(1);
 
         protected override SemaphoreSlim AsyncSemaphore { get { return SpecialIdentifierAction.asyncSemaphore; } }
@@ -28,7 +29,7 @@ namespace MixItUp.Base.Actions
         [DataMember]
         public bool SpecialIdentifierShouldProcessMath { get; set; }
 
-        public SpecialIdentifierAction() 
+        public SpecialIdentifierAction()
             : base(ActionTypeEnum.SpecialIdentifier)
         {
             this.MakeGloballyUsable = true;
@@ -53,6 +54,9 @@ namespace MixItUp.Base.Actions
                 {
                     // Process Math
                     CalculationEngine engine = new CalculationEngine();
+                    engine.AddFunction("random", Random);
+                    engine.AddFunction("randomrange", RandomRange);
+
                     double result = engine.Calculate(replacementText);
                     replacementText = result.ToString();
                 }
@@ -72,6 +76,16 @@ namespace MixItUp.Base.Actions
             {
                 this.extraSpecialIdentifiers[this.SpecialIdentifierName] = replacementText;
             }
+        }
+        
+        private double Random(double max)
+        {
+            return this.RandomRange(1, max);
+        }
+
+        private double RandomRange(double min, double max)
+        {
+            return RandomHelper.GenerateRandomNumber((int)min, (int)max);
         }
     }
 }

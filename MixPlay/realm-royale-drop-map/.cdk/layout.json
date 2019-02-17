@@ -28,7 +28,7 @@
             "reorderEnabled": true,
             "title": "Controls",
             "type": "component",
-            "width": 0.75          
+            "width": 0.75
           }
         ],
         "isClosable": true,

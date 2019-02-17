@@ -11,7 +11,7 @@ namespace MixItUp.Base.Model.Remote.Authentication
 
         [DataMember]
         public string Name { get; set; }
-        
+
         public RemoteConnectionModel() { }
 
         public RemoteConnectionModel(string name)

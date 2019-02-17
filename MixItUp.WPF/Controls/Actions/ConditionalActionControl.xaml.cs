@@ -24,7 +24,6 @@ namespace MixItUp.WPF.Controls.Actions
                 this.IgnoreCasingToggleButton.IsChecked = this.action.IgnoreCase;
                 this.Value1TextBox.Text = this.action.Value1;
                 this.ComparisionTypeComboBox.SelectedItem = EnumHelper.GetEnumName(this.action.ComparisionType);
-                this.Value2TextBox.Text = this.action.Value2;
                 if (this.action.ComparisionType == ConditionalComparisionTypeEnum.Between)
                 {
                     this.MinValue2TextBox.Text = this.action.Value2;

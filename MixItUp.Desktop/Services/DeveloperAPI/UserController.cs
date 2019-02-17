@@ -290,7 +290,6 @@ namespace MixItUp.Desktop.Services.DeveloperAPI
                 int quantityToRemove = currencyUpdate.Amount * -1;
                 if (!user.HasCurrencyAmount(currency, quantityToRemove))
                 {
-                    // If the request is to remove currency, but user doesn't have enough, fail
                     var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
                     {
                         Content = new ObjectContent<Error>(new Error { Message = "User does not have enough currency to remove" }, new JsonMediaTypeFormatter(), "application/json"),
@@ -319,7 +318,6 @@ namespace MixItUp.Desktop.Services.DeveloperAPI
                     ReasonPhrase = "Inventory ID not found"
                 };
                 throw new HttpResponseException(resp);
-
             }
 
             if (inventoryUpdate == null)

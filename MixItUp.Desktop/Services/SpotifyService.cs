@@ -163,7 +163,7 @@ namespace MixItUp.Desktop.Services
             {
                 if (playlist != null)
                 {
-                    foreach (JObject song in await this.GetPagedResult(string.Format("users/{0}/playlists/{1}/tracks", this.Profile.ID, playlist.ID)))
+                    foreach (JObject song in await this.GetPagedResult(string.Format("playlists/{0}/tracks", playlist.ID)))
                     {
                         results.Add(new SpotifySong((JObject)song["track"]));
                     }

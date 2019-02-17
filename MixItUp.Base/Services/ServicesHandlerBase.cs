@@ -81,7 +81,7 @@ namespace MixItUp.Base.Services
 
         public abstract Task<bool> InitializeExtraLife();
         public abstract Task DisconnectExtraLife();
-        
+
         public abstract Task<bool> InitializeTipeeeStream();
         public abstract Task DisconnectTipeeeStream();
 

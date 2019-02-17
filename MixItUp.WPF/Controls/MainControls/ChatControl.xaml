@@ -15,7 +15,7 @@
              FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"   
                           
              d:DesignHeight="600" d:DesignWidth="800">
-    <local:MainControlBase.Resources>        
+    <local:MainControlBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
@@ -31,50 +31,10 @@
                 <MenuItem x:Name="UserInformationMenuItem" Header="User Info" Click="UserInformationMenuItem_Click" />
             </ContextMenu>
 
-            <Style x:Key="SendButtonStyle" TargetType="{x:Type Button}">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderBrush" Value="Transparent"/>
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="FontWeight" Value="Medium"/>
-                <Setter Property="FontSize" Value="14"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                <Setter Property="Padding" Value="0"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Grid Background="#00000000">
-                                <MaterialDesign:PackIcon Name="SendChatMessageButton" Kind="Send" SnapsToDevicePixels="True"
-                                                     Foreground="{TemplateBinding Foreground}"
-                                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                     Margin="{TemplateBinding Padding}" Width="Auto" Height="Auto"/>
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" TargetName="SendChatMessageButton" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                                </Trigger>
-                                <Trigger Property="IsKeyboardFocused" Value="True">
-                                    <Setter Property="Foreground" TargetName="SendChatMessageButton" Value="{DynamicResource PrimaryHueMidBrush}"/>
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Opacity" Value="0.23"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
         </ResourceDictionary>
     </local:MainControlBase.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="60"/>
-        </Grid.RowDefinitions>
         <GroupBox Grid.Row="0">
             <GroupBox.Header>
                 <Grid>
@@ -175,6 +135,11 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
+                        <ComboBox x:Name="SendChatAsComboBox" Grid.Column="1" MaterialDesign:HintAssist.Hint="Send As" Width="80" />
+
+                        <TextBox x:Name="ChatMessageTextBox" Grid.Column="3" TextChanged="ChatMessageTextBox_TextChanged" PreviewKeyDown="ChatMessageTextBox_PreviewKeyDown" KeyDown="ChatMessageTextBox_KeyDown" MaterialDesign:HintAssist.Hint="Chat Message" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+                        <Button x:Name="SendChatMessageButton" Grid.Column="4" Width="70" Click="SendChatMessageButton_Click">Send</Button>
                     </Grid>
                 </Grid>
 
@@ -210,47 +175,5 @@
                 </Grid>
             </MaterialDesign:PopupBox>
         </Canvas>
-
-        <MaterialDesign:ColorZone Mode="PrimaryMid" Grid.Row="1" Width="Auto" CornerRadius="3" MaterialDesign:ShadowAssist.ShadowDepth="Depth2">
-            <StackPanel Orientation="Horizontal" Margin="10 5 10 5">
-                <Border Background="Gray" MaxHeight="40" CornerRadius="3" ToolTip="Send As">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="10" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <ComboBox x:Name="SendChatAsComboBox" Grid.Column="1" MaterialDesign:HintAssist.Hint="Send As" Width="100" />
-                    </Grid>
-                </Border>
-
-                <MaterialDesign:ColorZone Mode="PrimaryLight" CornerRadius="2" Width="Auto" MaterialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="8 0 0 0" >
-                    <StackPanel Orientation="Horizontal" Margin="3">
-                        <Border Background="White" MaxHeight="40" CornerRadius="3">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBox Grid.Column="1" x:Name="ChatMessageTextBox" TextChanged="ChatMessageTextBox_TextChanged"
-                                         PreviewKeyDown="ChatMessageTextBox_PreviewKeyDown"
-                                         KeyDown="ChatMessageTextBox_KeyDown"
-                                         MaterialDesign:HintAssist.Hint="Chat Message"
-                                         MaterialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0"
-                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" MinWidth="560" VerticalAlignment="Center"/>
-                            </Grid>
-                        </Border>
-                        
-                    </StackPanel>
-                    
-                </MaterialDesign:ColorZone>                
-                <Button x:Name="SendChatMessageButton" Grid.Column="4" Width="90" Margin="8 0 0 0" Click="SendChatMessageButton_Click">
-                    <StackPanel Orientation="Horizontal">
-                        <MaterialDesign:PackIcon Kind="Send"/>
-                        <TextBlock Text="Send" Margin="4 0 0 0"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-        </MaterialDesign:ColorZone>
     </Grid>
 </local:MainControlBase>

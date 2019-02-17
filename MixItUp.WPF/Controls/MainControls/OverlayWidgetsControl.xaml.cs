@@ -114,6 +114,7 @@ namespace MixItUp.WPF.Controls.MainControls
                     {
                         ChannelSession.Settings.OverlayWidgets.Remove(widget);
                         await this.HideWidget(widget);
+
                         await ChannelSession.SaveSettings();
                         this.RefreshList();
                     }

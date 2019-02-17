@@ -14,7 +14,7 @@
       "Tooltip": "Runs a Mix It Up command",
       "PropertyInspectorPath": "PropertyInspectors/RunCommandAction/Index.html",
       "UUID": "com.mixitup.streamdeckplugin.runcommand"
- },
+    },
     {
       "Icon": "Images/mixPlayStatusIcon",
       "Name": "MixPlay Status",
@@ -34,7 +34,7 @@
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Displays the current connection status of MixPlay",
-	  "PropertyInspectorPath": "PropertyInspectors/MixPlayStatusAction/Index.html",
+      "PropertyInspectorPath": "PropertyInspectors/MixPlayStatusAction/Index.html",
       "UUID": "com.mixitup.streamdeckplugin.mixplaystatus"
     }
   ],
@@ -43,7 +43,7 @@
   "Name": "Mix It Up",
   "Icon": "Images/categoryIcon",
   "URL": "https://mixitupapp.com/",
-  "Version": "1.0",
+  "Version": "1.1",
   "CodePath": "MixItUp.StreamDeckPlugin.exe",
   "Category": "Mix It Up",
   "CategoryIcon": "Images/categoryIcon",

@@ -99,8 +99,8 @@ namespace MixItUp.WPF.Controls.Actions
                     {
                         if (!string.IsNullOrEmpty(this.SourceTextTextBox.Text) && !string.IsNullOrEmpty(this.SourceLoadTextFromTextBox.Text))
                         {
-                            StreamingSoftwareAction action = StreamingSoftwareAction.CreateTextSourceAction(software, this.SourceSceneNameTextBox.Text,
-                                this.SourceNameTextBox.Text, this.SourceVisibleCheckBox.IsChecked.GetValueOrDefault(), this.SourceTextTextBox.Text, this.SourceLoadTextFromTextBox.Text);                      
+                            StreamingSoftwareAction action = StreamingSoftwareAction.CreateTextSourceAction(software, this.SourceSceneNameTextBox.Text, 
+                                this.SourceNameTextBox.Text, this.SourceVisibleCheckBox.IsChecked.GetValueOrDefault(), this.SourceTextTextBox.Text, this.SourceLoadTextFromTextBox.Text);
                             action.UpdateReferenceTextFile(string.Empty);
                             return action;
                         }
@@ -110,7 +110,7 @@ namespace MixItUp.WPF.Controls.Actions
                         if (!string.IsNullOrEmpty(this.SourceWebPageTextBox.Text))
                         {
                             return StreamingSoftwareAction.CreateWebBrowserSourceAction(software, this.SourceSceneNameTextBox.Text, this.SourceNameTextBox.Text,
-                               this.SourceVisibleCheckBox.IsChecked.GetValueOrDefault(), this.SourceWebPageTextBox.Text);
+                                this.SourceVisibleCheckBox.IsChecked.GetValueOrDefault(), this.SourceWebPageTextBox.Text);
                         }
                     }
                     else if (type == StreamingActionTypeEnum.SourceDimensions)

@@ -7,6 +7,7 @@ using MixItUp.Base.Model.Interactive;
 using MixItUp.Base.Model.Overlay;
 using MixItUp.Base.Model.Serial;
 using MixItUp.Base.Model.User;
+using MixItUp.Base.Remote.Models;
 using MixItUp.Base.Services;
 using MixItUp.Base.Util;
 using MixItUp.Base.ViewModel.Interactive;
@@ -70,6 +71,7 @@ namespace MixItUp.Base
 
         uint DefaultInteractiveGame { get; set; }
         bool PreventUnknownInteractiveUsers { get; set; }
+        bool PreventSmallerCooldowns { get; set; }
         List<InteractiveSharedProjectModel> CustomInteractiveProjectIDs { get; set; }
 
         int RegularUserMinimumHours { get; set; }
@@ -203,6 +205,8 @@ namespace MixItUp.Base
 
         LockedList<UserQuoteViewModel> UserQuotes { get; }
 
+        LockedDictionary<Guid, RemoteProfileBoardModel> RemoteProfiles { get; }
+
         LockedList<OverlayWidget> OverlayWidgets { get; set; }
 
         LockedList<string> FilteredWords { get; }
@@ -228,4 +232,3 @@ namespace MixItUp.Base
     }
 
 }
-

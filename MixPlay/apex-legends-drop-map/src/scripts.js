@@ -79,7 +79,7 @@ function handleControlUpdate(update) {
 			else {
 				sparkCostDiv.style.visibility = 'hidden';
 			}
-
+			
             if (control.meta.x >= 0 && control.meta.y >= 0 && control.meta.userID != null) {
                 var xPos = ((control.meta.x / 100) * mapImage.width) + mapImage.offsetLeft;
                 var yPos = ((control.meta.y / 100) * mapImage.height) + mapImage.offsetTop;
@@ -274,7 +274,7 @@ window.addEventListener('load', function initMixer() {
 
     timerDiv = document.getElementById('timerDiv');
     timerText = document.getElementById('timerText');
-
+	
 	sparkCostDiv = document.getElementById('sparkCostDiv');
 	sparkCostText = document.getElementById('sparkCostText');
 
@@ -299,4 +299,4 @@ if (haveGamepadEvents) {
     setInterval(scangamepads, 500);
 }
 
-mixer.socket.on('onControlUpdate', handleControlUpdate); 
+mixer.socket.on('onControlUpdate', handleControlUpdate);

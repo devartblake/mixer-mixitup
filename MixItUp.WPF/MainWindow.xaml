@@ -15,9 +15,9 @@
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"   
-        WindowStartupLocation="CenterScreen"
+
         Icon="./Logo.ico"
-        Title="Mix It Up" Height="720" Width="1000" MinHeight="500" MinWidth="650">
+        Title="Mix It Up" MinWidth="650" MinHeight="500" Height="650" Width="1000">
     <Windows:LoadingWindowBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -53,7 +53,6 @@
 
         </Grid>
 
-        <Controls:LoadingStatusBar x:Name="StatusBar" Grid.Row="1" /> 
-        
-    </Grid>   
+        <Controls:LoadingStatusBar x:Name="StatusBar" Grid.Row="1" />
+    </Grid>
 </Windows:LoadingWindowBase>

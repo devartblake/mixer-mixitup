@@ -275,6 +275,7 @@ namespace MixItUp.Desktop.Services
             catch (Exception ex) { Logger.Log(ex); }
             return null;
         }
+
         public async Task<IEnumerable<DiscordEmoji>> GetEmojis(DiscordServer server)
         {
             try

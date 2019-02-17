@@ -16,7 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace MixItUp.Base.MixerAPI
-{   
+{
     public class ChatClientWrapper : MixerWebSocketWrapper
     {
         private SemaphoreSlim whisperNumberLock = new SemaphoreSlim(1);
@@ -454,19 +454,19 @@ namespace MixItUp.Base.MixerAPI
                 }
             }
 
-            if (!string.IsNullOrEmpty(ChannelSession.Settings.NotificationChatMessageSoundFilePath))
+            if (!string.IsNullOrEmpty(ChannelSession.Settings.NotificationChatWhisperSoundFilePath) && message.IsWhisper)
             {
-                await ChannelSession.Services.AudioService.Play(ChannelSession.Settings.NotificationChatMessageSoundFilePath, 100);
+                await ChannelSession.Services.AudioService.Play(ChannelSession.Settings.NotificationChatWhisperSoundFilePath, 100);
             }
 
-            if (!string.IsNullOrEmpty(ChannelSession.Settings.NotificationChatTaggedSoundFilePath) && message.IsUserTagged)
+            else if (!string.IsNullOrEmpty(ChannelSession.Settings.NotificationChatTaggedSoundFilePath) && message.IsUserTagged)
             {
                 await ChannelSession.Services.AudioService.Play(ChannelSession.Settings.NotificationChatTaggedSoundFilePath, 100);
             }
 
-            if (!string.IsNullOrEmpty(ChannelSession.Settings.NotificationChatWhisperSoundFilePath) && message.IsWhisper)
+            else if (!string.IsNullOrEmpty(ChannelSession.Settings.NotificationChatMessageSoundFilePath))
             {
-                await ChannelSession.Services.AudioService.Play(ChannelSession.Settings.NotificationChatWhisperSoundFilePath, 100);
+                await ChannelSession.Services.AudioService.Play(ChannelSession.Settings.NotificationChatMessageSoundFilePath, 100);
             }
 
             GlobalEvents.ChatMessageReceived(message);
@@ -601,7 +601,7 @@ namespace MixItUp.Base.MixerAPI
 
                 tokenSource.Token.ThrowIfCancellationRequested();
             });
-        }              
+        }
 
         private async Task ChatterJoinBackground()
         {

@@ -54,6 +54,9 @@ namespace MixItUp.Base.Util
 
         public const string MilestoneSpecialIdentifierHeader = "milestone";
 
+        public const string QuoteSpecialIdentifierHeader = "quote";
+        public const string QuoteNumberRegexSpecialIdentifier = QuoteSpecialIdentifierHeader + "\\d+";
+
         public const string CurrentSongIdentifierHeader = "currentsong";
         public const string NextSongIdentifierHeader = "nextsong";
 
@@ -397,6 +400,28 @@ namespace MixItUp.Base.Util
                 }
             }
 
+            if (this.ContainsSpecialIdentifier(QuoteSpecialIdentifierHeader) && ChannelSession.Settings.QuotesEnabled && ChannelSession.Settings.UserQuotes.Count > 0)
+            {
+                UserQuoteViewModel quote = ChannelSession.Settings.UserQuotes.PickRandom();
+                if (quote != null)
+                {
+                    this.ReplaceSpecialIdentifier(QuoteSpecialIdentifierHeader + "random", quote.ToString());
+                }
+
+                if (this.ContainsRegexSpecialIdentifier(QuoteNumberRegexSpecialIdentifier))
+                {
+                    await this.ReplaceNumberBasedRegexSpecialIdentifier(QuoteNumberRegexSpecialIdentifier, (index) =>
+                    {
+                        if (index > 0 && index <= ChannelSession.Settings.UserQuotes.Count)
+                        {
+                            index--;
+                            return Task.FromResult(ChannelSession.Settings.UserQuotes[index].ToString());
+                        }
+                        return Task.FromResult<string>(null);
+                    });
+                }
+            }
+
             if (this.ContainsSpecialIdentifier(CostreamUsersSpecialIdentifier))
             {
                 this.ReplaceSpecialIdentifier(CostreamUsersSpecialIdentifier, await CostreamChatCommand.GetCostreamUsers());
@@ -486,6 +511,10 @@ namespace MixItUp.Base.Util
                     if (hosters != null)
                     {
                         this.ReplaceSpecialIdentifier(StreamHostCountSpecialIdentifier, hosters.Count().ToString());
+                    }
+                    else
+                    {
+                        this.ReplaceSpecialIdentifier(StreamHostCountSpecialIdentifier, "0");
                     }
                 }
             }
@@ -767,7 +796,7 @@ namespace MixItUp.Base.Util
                                     allItemsList.Add(item.Name + " x" + amount);
                                 }
 
-                                string itemSpecialIdentifier = inventory.UserAmountSpecialIdentifierHeader + item.SpecialIdentifier;
+                                string itemSpecialIdentifier = identifierHeader + inventory.UserAmountSpecialIdentifierHeader + item.SpecialIdentifier;
                                 this.ReplaceSpecialIdentifier(itemSpecialIdentifier, amount.ToString());
                             }
 
@@ -841,7 +870,11 @@ namespace MixItUp.Base.Util
                 string text = new String(match.Value.Where(c => char.IsDigit(c)).ToArray());
                 if (int.TryParse(text, out int number))
                 {
-                    this.ReplaceSpecialIdentifier(match.Value, await replacer(number), includeSpecialIdentifierHeader: false);
+                    string replacement = await replacer(number);
+                    if (replacement != null)
+                    {
+                        this.ReplaceSpecialIdentifier(match.Value, replacement, includeSpecialIdentifierHeader: false);
+                    }
                 }
             }
         }

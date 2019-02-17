@@ -56,7 +56,7 @@ namespace MixItUp.WPF.Controls.Actions
             CommandActionTypeEnum type = EnumHelper.GetEnumValueFromString<CommandActionTypeEnum>((string)this.TypeComboBox.SelectedItem);
             if (type == CommandActionTypeEnum.DisableCommandGroup || type == CommandActionTypeEnum.EnableCommandGroup)
             {
-                if(this.CommandGroupNameComboBox.SelectedIndex >= 0)
+                if (this.CommandGroupNameComboBox.SelectedIndex >= 0)
                 {
                     return new CommandAction(type, this.CommandGroupNameComboBox.Text);
                 }

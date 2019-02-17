@@ -1,16 +1,16 @@
 ﻿using MixItUp.Base.Commands;
-using MixItUp.Base.ViewModel;
+using MixItUp.Base.ViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MixItUp.Base.ViewModel.Controls.MainControls
 {
-    public class CommandGroupControlViewModel : NotifyPropertyChangedViewModelBase
-    {        
+    public class CommandGroupControlViewModel : ViewModelBase
+    {
         public CommandGroupSettings GroupSettings { get; set; }
 
-        public string GroupName { get { return (this.GroupSettings != null) ? this.GroupSettings.Name : null;  } }
+        public string GroupName { get { return (this.GroupSettings != null) ? this.GroupSettings.Name : null; } }
         public string DisplayName { get { return (!string.IsNullOrEmpty(this.GroupName)) ? this.GroupName : "Ungrouped"; } }
 
         public bool IsMinimized
@@ -31,6 +31,7 @@ namespace MixItUp.Base.ViewModel.Controls.MainControls
             set
             {
                 bool newIsEnabledState = !this.IsEnabled;
+
                 foreach (CommandBase command in ChannelSession.AllCommands)
                 {
                     if (this.GroupName.Equals(command.GroupName))
@@ -38,10 +39,11 @@ namespace MixItUp.Base.ViewModel.Controls.MainControls
                         command.IsEnabled = newIsEnabledState;
                     }
                 }
-                this.OnPropertyChanged();
+
+                this.NotifyPropertyChanged();
             }
         }
-        
+
         public bool IsEnableSwitchToggable { get { return !string.IsNullOrEmpty(this.GroupName); } }
 
         public ObservableCollection<CommandBase> Commands
@@ -50,7 +52,7 @@ namespace MixItUp.Base.ViewModel.Controls.MainControls
             set
             {
                 this.commands = value;
-                this.OnPropertyChanged();
+                this.NotifyPropertyChanged();
             }
         }
         private ObservableCollection<CommandBase> commands = new ObservableCollection<CommandBase>();

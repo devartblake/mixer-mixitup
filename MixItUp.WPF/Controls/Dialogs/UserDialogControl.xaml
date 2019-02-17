@@ -88,7 +88,6 @@
                 <TextBlock Grid.Column="0" Grid.Row="10">Stream:</TextBlock>
                 <TextBlock x:Name="StreamStatusTextBlock" Grid.Column="2" Grid.Row="10" />
             </Grid>
-            
         </Grid>
 
         <Grid Grid.Row="2" HorizontalAlignment="Center">
@@ -151,7 +150,6 @@
                 </Button.CommandParameter>
                 <MaterialDesign:PackIcon Kind="AccountPlus" Height="24" Width="24" Margin="-13,-10" Style="{StaticResource DefaultPackIcon}" />
             </Button>
-
             <Button x:Name="UnfollowButton" Visibility="Collapsed" Grid.Column="0" ToolTip="Unfollow" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static MaterialDesignWPF:DialogHost.CloseDialogCommand}">
                 <Button.CommandParameter>
                     <system:String>Unfollow</system:String>
@@ -167,7 +165,6 @@
                     <MaterialDesign:PackIcon Kind="SecurityAccount" Height="24" Width="24" Margin="-13,-10" Style="{StaticResource DefaultPackIcon}" />
                 </StackPanel>
             </Button>
-
             <Button x:Name="DemoteFromModButton" Visibility="Collapsed" Grid.Column="2" ToolTip="Demote From Mod" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static MaterialDesignWPF:DialogHost.CloseDialogCommand}">
                 <Button.CommandParameter>
                     <system:String>DemoteFromMod</system:String>
@@ -195,8 +192,8 @@
                 </StackPanel>
             </Button>
 
-            <Border Grid.Column="8" Style="{StaticResource DefaultBorder}"/>
-            
+            <Border Grid.Column="8" Style="{StaticResource DefaultBorder}" />
+
             <Button Grid.Column="10" ToolTip="Purge" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static MaterialDesignWPF:DialogHost.CloseDialogCommand}">
                 <Button.CommandParameter>
                     <system:String>Purge</system:String>
@@ -240,13 +237,12 @@
                 </Button.CommandParameter>
                 <MaterialDesign:PackIcon Kind="BlockHelper" Height="24" Width="24" Margin="-13,-10" Style="{StaticResource DefaultPackIcon}" />
             </Button>
-            <Button x:Name="UnbanButton" Visibility="Collapsed" Grid.Column="6" ToolTip="Unban" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static MaterialDesignWPF:DialogHost.CloseDialogCommand}">
+            <Button x:Name="UnbanButton" Visibility="Collapsed" Grid.Column="16" ToolTip="Unban" Style="{DynamicResource MaterialDesignFlatButton}" Command="{x:Static MaterialDesignWPF:DialogHost.CloseDialogCommand}">
                 <Button.CommandParameter>
                     <system:String>Unban</system:String>
                 </Button.CommandParameter>
                 <MaterialDesign:PackIcon Kind="HumanHandsup" Height="24" Width="24" Margin="-13,-10" Style="{StaticResource DefaultPackIcon}" />
             </Button>
-           
         </Grid>
     </Grid>
 </UserControl>

@@ -26,7 +26,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="ModerationActionTypeComboBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Moderation Action" Style="{StaticResource MaterialDesignFloatingHintComboBox}" SelectionChanged="ModerationActionTypeComboBox_SelectionChanged" Width="300"/>
+        <ComboBox x:Name="ModerationActionTypeComboBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Moderation Action" Style="{StaticResource MaterialDesignFloatingHintComboBox}" SelectionChanged="ModerationActionTypeComboBox_SelectionChanged" Width="300" />
 
         <TextBox Grid.Column="2" x:Name="UserNameTextBox" VerticalAlignment="Center" Visibility="Collapsed" MaterialDesign:HintAssist.Hint="User Name (Optional)" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Width="200" />
 

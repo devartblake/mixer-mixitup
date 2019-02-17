@@ -34,7 +34,6 @@ namespace MixItUp.Base
         private const string DefaultEmoticonsManifest = "https://mixer.com/_latest/assets/emoticons/manifest.json";
         private const string DefaultEmoticonsLinkFormat = "https://mixer.com/_latest/assets/emoticons/{0}.png";
 
-        //                                 Source             Text
         private static readonly LockedDictionary<string, LockedDictionary<string, EmoticonImage>> builtinEmoticons = new LockedDictionary<string, LockedDictionary<string, EmoticonImage>>();
         private static readonly LockedDictionary<string, LockedDictionary<string, EmoticonImage>> externalEmoticons = new LockedDictionary<string, LockedDictionary<string, EmoticonImage>>();
         private static readonly LockedDictionary<string, LockedDictionary<string, EmoticonImage>> userEmoticons = new LockedDictionary<string, LockedDictionary<string, EmoticonImage>>();
@@ -396,7 +395,7 @@ namespace MixItUp.Base
 
         public static void EnsureEmoticonForMessage(ChatMessageDataModel message)
         {
-            if (!string.IsNullOrEmpty(message.pack) && !string.IsNullOrEmpty(message.text) && !string.IsNullOrEmpty(message.source) && message.coords != null && Uri.IsWellFormedUriString(message.pack, UriKind.Absolute))
+            if (!string.IsNullOrEmpty(message.pack) && !string.IsNullOrEmpty(message.text) && !string.IsNullOrEmpty(message.source) && message.coords != null && message.source.Equals("external") && Uri.IsWellFormedUriString(message.pack, UriKind.Absolute))
             {
                 if (!externalEmoticons.ContainsKey(message.pack))
                 {

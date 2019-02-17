@@ -46,7 +46,7 @@ namespace MixItUp.Desktop.Services.DeveloperAPI
             {
                 var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
-                    Content = new ObjectContent<Error>(new Error { Message = "Unable to parse chat message from POST body." }, new JsonMediaTypeFormatter(), "application/json"),
+                    Content = new ObjectContent<Error>(new Error { Message = "Unable to parse chat message from POST body."}, new JsonMediaTypeFormatter(), "application/json"),
                     ReasonPhrase = "Invalid POST Body"
                 };
                 throw new HttpResponseException(resp);
@@ -63,7 +63,7 @@ namespace MixItUp.Desktop.Services.DeveloperAPI
             {
                 var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
-                    Content = new ObjectContent<Error>(new Error { Message = "Unable to parse chat whisper from POST body." }, new JsonMediaTypeFormatter(), "application/json"),
+                    Content = new  ObjectContent<Error>(new Error { Message = "Unable to parse chat whisper from POST body." }, new JsonMediaTypeFormatter(), "application/json"),
                     ReasonPhrase = "Invalid POST Body"
                 };
                 throw new HttpResponseException(resp);

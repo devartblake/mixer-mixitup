@@ -89,7 +89,7 @@ namespace MixItUp.API
 
         public static async Task SendBroadcastAsync(JObject data, MixPlayBroadcastTargetBase[] targets)
         {
-            await RestClient.PostAsync($"mixplay/broadcast", new MixPlayTargetBroadcast() { Data = data, Targets = targets });
+            await RestClient.PostAsync($"mixplay/broadcast", new MixPlayTargetBroadcast() { Data =  data, Targets = targets });
         }
     }
 }

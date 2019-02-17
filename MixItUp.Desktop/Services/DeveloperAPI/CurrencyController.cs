@@ -61,7 +61,12 @@ namespace MixItUp.Desktop.Services.DeveloperAPI
             if (count < 1)
             {
                 // TODO: Consider checking or a max # too? (100?)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new ObjectContent<Error>(new Error { Message = $"Count must be greater than 0." }, new JsonMediaTypeFormatter(), "application/json"),
+                    ReasonPhrase = "Count too low"
+                };
+                throw new HttpResponseException(resp);
             }
 
             UserCurrencyViewModel currency = ChannelSession.Settings.Currencies[currencyID];

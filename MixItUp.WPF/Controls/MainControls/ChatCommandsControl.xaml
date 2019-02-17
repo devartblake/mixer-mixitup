@@ -19,7 +19,7 @@
     <local:MainControlBase.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </local:MainControlBase.Resources>
-
+    
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

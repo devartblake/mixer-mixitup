@@ -21,8 +21,7 @@ namespace MixItUp.SignalR.Client
             this.connection = new HubConnectionBuilder().AddJsonProtocol(options => {
                 options.PayloadSerializerSettings = new Newtonsoft.Json.JsonSerializerSettings()
                 {
-                    TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All,
-                    SerializationBinder = new CrossPlatformSerializationBinder()
+                    TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All, SerializationBinder = new CrossPlatformSerializationBinder()
                 };
             }).WithUrl(this.Address).Build();
             this.connection.Closed += Connection_Closed;

@@ -1,4 +1,4 @@
-function loadAction() {
+﻿function loadAction() {
     websocket.onmessage = function (evt) {
         // Received message from Stream Deck
         var jsonObj = JSON.parse(evt.data);

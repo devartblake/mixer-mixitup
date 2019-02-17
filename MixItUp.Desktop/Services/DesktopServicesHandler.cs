@@ -390,7 +390,7 @@ namespace MixItUp.Desktop.Services
                 ChannelSession.Settings.ExtraLifeIncludeTeamDonations = false;
             }
         }
-        
+
         public override async Task<bool> InitializeTipeeeStream()
         {
             this.TipeeeStream = (ChannelSession.Settings.TipeeeStreamOAuthToken != null) ? new TipeeeStreamService(ChannelSession.Settings.TipeeeStreamOAuthToken) : new TipeeeStreamService();

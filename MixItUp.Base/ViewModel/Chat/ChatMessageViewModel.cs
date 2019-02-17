@@ -50,7 +50,6 @@ namespace MixItUp.Base.ViewModel.Chat
 
             this.User = (user != null) ? user : new UserViewModel(this.ChatMessageEvent);
             this.IsInUsersChannel = ChannelSession.Channel.id.Equals(this.ChatMessageEvent.channel);
-
             this.TargetUsername = this.ChatMessageEvent.target;
 
             if (this.ChatMessageEvent.message.ContainsSkill)
@@ -67,7 +66,7 @@ namespace MixItUp.Base.ViewModel.Chat
             this.SetMessageContents(chatMessageContents);
         }
 
-            public ChatMessageViewModel(string alertText, UserViewModel user = null, string foregroundBrush = null)
+        public ChatMessageViewModel(string alertText, UserViewModel user = null, string foregroundBrush = null)
         {
             this.User = user;
             this.IsInUsersChannel = true;
@@ -103,7 +102,6 @@ namespace MixItUp.Base.ViewModel.Chat
             {
                 return string.Empty;
             }
-
 
             if ((this.IsSkill || this.IsChatSkill) && string.IsNullOrEmpty(this.Message))
             {

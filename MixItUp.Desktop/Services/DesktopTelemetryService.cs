@@ -43,9 +43,9 @@ namespace MixItUp.Desktop.Services
             this.TrySendEvent(() => this.telemetryClient.TrackEvent("Login", new Dictionary<string, string> { { "Is Streamer", isStreamer.ToString() }, { "Is Partner", isPartner.ToString() } }));
         }
 
-        public void TrackCommand(CommandTypeEnum type, bool isBasic)
+        public void TrackCommand(CommandTypeEnum type, bool IsBasic)
         {
-            this.TrySendEvent(() => this.telemetryClient.TrackEvent("Command", new Dictionary<string, string> { { "Type", EnumHelper.GetEnumName(type) }, { "Is Basic", isBasic.ToString() } } ));
+            this.TrySendEvent(() => this.telemetryClient.TrackEvent("Command", new Dictionary<string, string> { { "Type", EnumHelper.GetEnumName(type) }, { "Is Basic", IsBasic.ToString() } }));
         }
 
         public void TrackAction(ActionTypeEnum type)
@@ -72,15 +72,6 @@ namespace MixItUp.Desktop.Services
             }
         }
 
-        private void TrySendEvent(Action eventAction)
-        {
-            if (!ChannelSession.Settings.OptOutTracking && this.totalEventsSent < DesktopTelemetryService.MaxTelemetryEventsPerSession)
-            {
-                eventAction();
-                this.totalEventsSent++;
-            }
-        }
-
         public void SetUserId(string userId)
         {
             this.telemetryClient.Context.User.Id = userId;
@@ -90,6 +81,15 @@ namespace MixItUp.Desktop.Services
         {
             Task.Run(() => { this.telemetryClient.Flush(); });
             Task.Delay(2000); // Allow time to flush
+        }
+
+        private void TrySendEvent(Action eventAction)
+        {
+            if (!ChannelSession.Settings.OptOutTracking && this.totalEventsSent < DesktopTelemetryService.MaxTelemetryEventsPerSession)
+            {
+                eventAction();
+                this.totalEventsSent++;
+            }
         }
     }
 }

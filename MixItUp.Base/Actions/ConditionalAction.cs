@@ -30,7 +30,6 @@ namespace MixItUp.Base.Actions
         DoesNotContain,
         [Name("Between")]
         Between
-        
     }
 
     [DataContract]
@@ -67,6 +66,7 @@ namespace MixItUp.Base.Actions
             this.Value2 = value2;
             this.CommandID = command.ID;
         }
+
         public ConditionalAction(ConditionalComparisionTypeEnum comparisionType, bool ignoreCase, string value1, string value2, string value3, CommandBase command)
             : this(comparisionType, ignoreCase, value1, value2, command)
         {

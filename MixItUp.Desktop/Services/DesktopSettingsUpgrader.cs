@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace MixItUp.Desktop.Services
 {
     internal static class DesktopSettingsUpgrader
-    {       
+    {
         private static string GetDefaultReferenceFilePath(string software, string source)
         {
             return Path.Combine(ChannelSession.Services.FileService.GetApplicationDirectory(), software, StreamingSoftwareAction.SourceTextFilesDirectoryName, source + ".txt");
@@ -61,7 +61,7 @@ namespace MixItUp.Desktop.Services
 
             await ChannelSession.Services.Settings.Save(settings);
         }
-               
+
         private static async Task Version17Upgrade(int version, string filePath)
         {
             if (version < 17)

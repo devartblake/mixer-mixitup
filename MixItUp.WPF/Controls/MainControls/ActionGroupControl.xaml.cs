@@ -5,7 +5,6 @@ using MixItUp.WPF.Controls.Command;
 using MixItUp.WPF.Windows.Command;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -49,11 +48,11 @@ namespace MixItUp.WPF.Controls.MainControls
             {
                 filter = filter.ToLower();
             }
-            
+
             this.actionGroupCommands.Clear();
-            
+
             IEnumerable<ActionGroupCommand> commands = ChannelSession.Settings.ActionGroupCommands.ToList();
-            foreach (var group in commands.Where(c => string.IsNullOrEmpty(filter) || c.Name.ToLower().Contains(filter)).GroupBy(c => c.GroupName).OrderByDescending(g => !string.IsNullOrEmpty(g.Key)).ThenBy(g => g.Key))
+            foreach (var group in commands.Where(c => string.IsNullOrEmpty(filter) || c.Name.ToLower().Contains(filter)).GroupBy(c => c.GroupName ?? string.Empty).OrderByDescending(g => !string.IsNullOrEmpty(g.Key)).ThenBy(g => g.Key))
             {
                 IEnumerable<CommandBase> cmds = (nameOrder > 0) ? group.OrderBy(c => c.Name) : group.OrderByDescending(c => c.Name);
                 CommandGroupSettings groupSettings = null;

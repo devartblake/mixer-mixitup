@@ -1,3 +1,4 @@
+
 const { MixerPlugin } = require('@mixer/cdk-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const CleanPlugin = require('clean-webpack-plugin');

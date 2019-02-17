@@ -88,7 +88,7 @@ namespace MixItUp.Base.Commands
 
         [DataMember]
         public string GroupName { get; set; }
-        
+
         [DataMember]
         public bool IsRandomized { get; set; }
 

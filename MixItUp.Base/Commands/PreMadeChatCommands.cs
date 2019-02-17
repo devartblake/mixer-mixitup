@@ -496,7 +496,7 @@ namespace MixItUp.Base.Commands
 
                         if (ChannelSession.Chat != null)
                         {
-                            await ChannelSession.Chat.SendMessage(string.Format("Added " + quote.ToString()));
+                            await ChannelSession.Chat.SendMessage("Added " + quote.ToString());
                         }
                     }
                     else

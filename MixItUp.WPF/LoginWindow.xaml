@@ -11,12 +11,13 @@
         mc:Ignorable="d"
                            
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
-        TextElement.FontSize="20"
+        TextElement.FontSize="14"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"      
 
         Icon="./Logo.ico"
-        Title="Mix It Up - Login" Height="480" Width="870">
+        Title="Mix It Up - Login" Height="480" Width="860">
     <Windows:LoadingWindowBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -32,43 +33,24 @@
             <Util:LocalizationConverter x:Key="LocalizationConverter" />
         </Grid.Resources>
         <Grid.Background>
-            <ImageBrush Stretch="UniformToFill" ImageSource="Assets/Images/Blue_Grunge_02.jpg"/>
+            <ImageBrush Stretch="UniformToFill" ImageSource="Assets/Images/Abstract_Lights.jpg"/>
         </Grid.Background>
-
+        
         <Grid.RowDefinitions>
-            <RowDefinition Height="200" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
 
         <MaterialDesign:DialogHost x:Name="MDDialogHost" Identifier="RootDialog" />
 
-        <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Width="Auto">
+        <Grid Grid.Row="0" Margin="10,10" HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Image Source="Logo.png" Margin="0,10,0,-10"/>
-        </Grid>
-
-        <Grid Grid.Row="0" Grid.Column="1" Margin="10,10" HorizontalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="200" />
-                <RowDefinition Height="200" />
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <GroupBox Grid.Row="0" Grid.Column="0" Header="Streamer" Margin="0,10,0,10" Width="320">
+            <GroupBox Grid.Column="0" Header="Streamer" Margin="0,8,0,8" Width="200">
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -78,11 +60,13 @@
 
                     <ComboBox Grid.Row="0" x:Name="ExistingStreamerComboBox" Width="140" DisplayMemberPath="Channel.user.username" MaterialDesign:HintAssist.Hint="Streamer Account" Style="{StaticResource MaterialDesignFloatingHintComboBox}" Visibility="Collapsed" />
 
-                    <Button Grid.Row="2" Grid.RowSpan="3" x:Name="StreamerLoginButton" Click="StreamerLoginButton_Click" Width="140" Height="50" Content="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Login'}" />
+                    <Button Grid.Row="2" Grid.RowSpan="3" x:Name="StreamerLoginButton" Click="StreamerLoginButton_Click" Width="80" Height="30" Content="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Login'}" />
                 </Grid>
             </GroupBox>
 
-            <GroupBox Grid.Row="0" Grid.Column="1" Header="Moderator" Margin="0,10,0,10" Width="320">
+            <Controls:MixerStatusAlertControl x:Name="MixerStatusAlertButton" Grid.Column="1" HorizontalAlignment="Center" />
+
+            <GroupBox Grid.Column="2" Header="Moderator" Margin="0,8,0,8" Width="200">
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -92,14 +76,13 @@
 
                     <ComboBox Grid.Row="0" x:Name="ModeratorChannelComboBox" Width="140" DisplayMemberPath="Channel.user.username" MaterialDesign:HintAssist.Hint="Channel Name" Style="{StaticResource MaterialDesignFloatingHintComboBox}" IsEditable="True" KeyDown="ModeratorChannelComboBox_KeyDown" />
 
-                    <Button Grid.Row="2" x:Name="ModeratorLoginButton" Click="ModeratorLoginButton_Click" Width="140" Height="50" Content="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Login'}" />
+                    <Button Grid.Row="2" x:Name="ModeratorLoginButton" Click="ModeratorLoginButton_Click" Width="80" Height="30" Content="{Binding Converter={StaticResource LocalizationConverter}, ConverterParameter='Login'}" />
 
                 </Grid>
             </GroupBox>
 
-            <Controls:MixerStatusAlertControl x:Name="MixerStatusAlertButton" Grid.Row="2" HorizontalAlignment="Center" />
         </Grid>
 
-        <Controls:LoadingStatusBar x:Name="StatusBar" Grid.Row="2" />
+        <Controls:LoadingStatusBar x:Name="StatusBar" Grid.Row="1" />
     </Grid>
 </Windows:LoadingWindowBase>

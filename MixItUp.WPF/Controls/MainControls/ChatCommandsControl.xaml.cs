@@ -213,13 +213,11 @@ namespace MixItUp.WPF.Controls.MainControls
 
         private void Window_Closed(object sender, EventArgs e)
         {
-
             this.RefreshList();
         }
 
         private void GroupCommandsToggleButton_Checked(object sender, RoutedEventArgs e)
         {
-
             this.RefreshList();
         }
 

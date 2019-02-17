@@ -68,7 +68,7 @@ namespace MixItUp.WPF.Controls.Command
 
             InitializeComponent();
         }
-        
+
         public override CommandBase GetExistingCommand() { return this.commandDetailsControl.GetExistingCommand(); }
 
         public override void MoveActionUp(ActionContainerControl control)

@@ -1,5 +1,4 @@
-﻿
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace MixItUp.WPF.Controls.Services
 {
@@ -15,6 +14,5 @@ namespace MixItUp.WPF.Controls.Services
             this.SetHeaderText("Stream Deck");
             await base.OnLoaded();
         }
-        
     }
 }

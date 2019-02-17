@@ -10,7 +10,7 @@ namespace MixItUp.API.Models
     {
         [Required]
         [DataMember]
-        public MixPlayBroadcastUser[] Users { get; set; }
+        public MixPlayBroadcastUser[] Users{ get; set; }
 
         [Required]
         [DataMember]

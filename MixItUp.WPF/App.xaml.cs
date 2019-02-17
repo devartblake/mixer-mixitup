@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -19,6 +20,12 @@ namespace MixItUp.WPF
     /// </summary>
     public partial class App : Application
     {
+        // Single instance unique identifier
+        private const string Guid = "6c5c10f4-aad5-42b1-b62e-cf195a322b94";
+        private Mutex _mutex;
+
+        private bool _singleInstanceClose;
+
         public static ApplicationSettings AppSettings;
 
         private bool crashObtained = false;
@@ -93,6 +100,25 @@ namespace MixItUp.WPF
             Logger.Log("Application Version: " + ChannelSession.Services.FileService.GetApplicationVersion());
 
             base.OnStartup(e);
+
+            // Create mutex
+            _mutex = new Mutex(true, "{" + Guid + "}");
+            var mutexIsAquired = _mutex.WaitOne(TimeSpan.Zero, true);
+
+            // Release mutex
+            if (mutexIsAquired)
+                _mutex.ReleaseMutex();
+
+
+        }
+
+        protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
+        {
+            base.OnSessionEnding(e);
+
+            e.Cancel = true;
+
+            Shutdown();
         }
 
         private void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) { this.HandleCrash(e.Exception); }

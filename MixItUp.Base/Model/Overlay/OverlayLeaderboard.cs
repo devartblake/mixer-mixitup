@@ -101,7 +101,7 @@ namespace MixItUp.Base.Model.Overlay
             this.CurrencyID = currency.ID;
         }
 
-        public OverlayLeaderboard(string htmlText, LeaderboardTypeEnum leaderboardType, int totalToShow, string borderColor, string backgroundColor,string textColor,
+        public OverlayLeaderboard(string htmlText, LeaderboardTypeEnum leaderboardType, int totalToShow, string borderColor, string backgroundColor, string textColor,
             string textFont, int width, int height, OverlayEffectEntranceAnimationTypeEnum addEvent, OverlayEffectExitAnimationTypeEnum removeEvent, LeaderboardSparksEmbersDateEnum date)
             : this(htmlText, leaderboardType, totalToShow, borderColor, backgroundColor, textColor, textFont, width, height, addEvent, removeEvent)
         {

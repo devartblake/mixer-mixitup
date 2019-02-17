@@ -70,7 +70,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBox x:Name="NameTextBox" Grid.Column="0" MaterialDesign:HintAssist.Hint="Currency/Rank Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Width="210" />
-
+                    
                     <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="0,4,0,0">Is Primary:</TextBlock>
                     <ToggleButton Grid.Column="4" x:Name="IsPrimaryToggleButton" Margin="0,4,0,0" />
 
@@ -110,7 +110,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Grid.Column="2" Header="Offline Rate">
+                    <GroupBox x:Name="OfflineRateGroupBox" Grid.Column="2" Header="Offline Rate">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -134,7 +134,7 @@
                     </GroupBox>
                 </Grid>
 
-                <Grid Grid.Row="4" HorizontalAlignment="Center">
+                <Grid x:Name="BonusesGrid" Grid.Row="4" HorizontalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="40" />

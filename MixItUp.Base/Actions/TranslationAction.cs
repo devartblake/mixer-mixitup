@@ -107,7 +107,7 @@ namespace MixItUp.Base.Actions
                                 await ChannelSession.Chat.SendMessage(await this.ReplaceSpecialIdentifiers(this.ResponseChatText, user, arguments, translationResult));
                             }
                         }
-                        else if(this.ResponseAction == TranslationResponseActionTypeEnum.Command)
+                        else if (this.ResponseAction == TranslationResponseActionTypeEnum.Command)
                         {
                             CommandBase command = ChannelSession.AllEnabledCommands.FirstOrDefault(c => c.ID.Equals(this.ResponseCommandID));
                             if (command != null)

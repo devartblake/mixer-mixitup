@@ -44,9 +44,6 @@ namespace MixItUp.Base.Actions
         MoveAllUsersToScene,
         [Name("Move All Users to Group")]
         MoveAllUsersToGroup,
-
-        [Name("Enable/Disable Control")]
-        EnableDisableControl
     }
 
     public enum InteractiveActionUpdateControlTypeEnum
@@ -57,18 +54,6 @@ namespace MixItUp.Base.Actions
         [Name("Text Size")]
         TextSize,
         Tooltip,
-        [Name("Spark Cost")]
-        SparkCost,
-        [Name("Accent Color")]
-        AccentColor,
-        [Name("Focus Color")]
-        FocusColor,
-        [Name("Border Color")]
-        BorderColor,
-        [Name("Background Color")]
-        BackgroundColor,
-        [Name("Background Image")]
-        BackgroundImage,
     }
 
     [DataContract]
@@ -159,15 +144,6 @@ namespace MixItUp.Base.Actions
             };
         }
 
-        public static InteractiveAction CreateEnableDisableControlAction(string controlID, bool enableDisable)
-        {
-            return new InteractiveAction(InteractiveActionTypeEnum.EnableDisableControl)
-            {
-                ControlID = controlID,
-                EnableDisableControl = enableDisable
-            };
-        }
-
         private static SemaphoreSlim asyncSemaphore = new SemaphoreSlim(1);
 
         protected override SemaphoreSlim AsyncSemaphore { get { return InteractiveAction.asyncSemaphore; } }
@@ -205,9 +181,6 @@ namespace MixItUp.Base.Actions
 
         [DataMember]
         public Dictionary<string, string> CustomMetadata { get; set; }
-
-        [DataMember]
-        public bool EnableDisableControl { get; set; }
 
         public InteractiveAction()
             : base(ActionTypeEnum.Interactive)
@@ -345,8 +318,7 @@ namespace MixItUp.Base.Actions
                             await ChannelSession.Interactive.UpdateControls(scene, buttons);
                         }
                     }
-                    else if (this.InteractiveType == InteractiveActionTypeEnum.UpdateControl || this.InteractiveType == InteractiveActionTypeEnum.SetCustomMetadata ||
-                        this.InteractiveType == InteractiveActionTypeEnum.EnableDisableControl)
+                    else if (this.InteractiveType == InteractiveActionTypeEnum.UpdateControl || this.InteractiveType == InteractiveActionTypeEnum.SetCustomMetadata)
                     {
                         InteractiveConnectedSceneModel scene = null;
                         InteractiveControlModel control = null;
@@ -374,7 +346,7 @@ namespace MixItUp.Base.Actions
                             if (this.InteractiveType == InteractiveActionTypeEnum.UpdateControl)
                             {
                                 string replacementValue = await this.ReplaceStringWithSpecialModifiers(this.UpdateValue, user, arguments);
-                                int.TryParse(replacementValue, out int replacementNumberValue);
+
                                 if (control is InteractiveButtonControlModel)
                                 {
                                     InteractiveButtonControlModel button = (InteractiveButtonControlModel)control;
@@ -384,12 +356,6 @@ namespace MixItUp.Base.Actions
                                         case InteractiveActionUpdateControlTypeEnum.TextSize: button.textSize = replacementValue; break;
                                         case InteractiveActionUpdateControlTypeEnum.TextColor: button.textColor = replacementValue; break;
                                         case InteractiveActionUpdateControlTypeEnum.Tooltip: button.tooltip = replacementValue; break;
-                                        case InteractiveActionUpdateControlTypeEnum.SparkCost: button.cost = replacementNumberValue; break;
-                                        case InteractiveActionUpdateControlTypeEnum.AccentColor: button.accentColor = replacementValue; break;
-                                        case InteractiveActionUpdateControlTypeEnum.FocusColor: button.focusColor = replacementValue; break;
-                                        case InteractiveActionUpdateControlTypeEnum.BorderColor: button.borderColor = replacementValue; break;
-                                        case InteractiveActionUpdateControlTypeEnum.BackgroundColor: button.backgroundColor = replacementValue; break;
-                                        case InteractiveActionUpdateControlTypeEnum.BackgroundImage: button.backgroundImage = replacementValue; break;
                                     }
                                 }
                                 else if (control is InteractiveLabelControlModel)
@@ -409,7 +375,6 @@ namespace MixItUp.Base.Actions
                                     {
                                         case InteractiveActionUpdateControlTypeEnum.Text: textbox.submitText = replacementValue; break;
                                         case InteractiveActionUpdateControlTypeEnum.Tooltip: textbox.placeholder = replacementValue; break;
-                                        case InteractiveActionUpdateControlTypeEnum.SparkCost: textbox.cost = replacementNumberValue; break;
                                     }
                                 }
                             }
@@ -436,10 +401,6 @@ namespace MixItUp.Base.Actions
                                         control.meta[kvp.Key] = value;
                                     }
                                 }
-                            }
-                            else if (this.InteractiveType == InteractiveActionTypeEnum.EnableDisableControl)
-                            {
-                                control.disabled = !this.EnableDisableControl;
                             }
 
                             await ChannelSession.Interactive.UpdateControls(scene, new List<InteractiveControlModel>() { control });

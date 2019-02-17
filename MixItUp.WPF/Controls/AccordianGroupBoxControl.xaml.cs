@@ -24,11 +24,11 @@ namespace MixItUp.WPF.Controls
 
         public bool IsMinimized
         {
-            get { return (bool)GetValue(IsMinimizedProperty);  }
+            get { return (bool)GetValue(IsMinimizedProperty); }
             set { SetValue(IsMinimizedProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for IsMinimized. This enables animation, styling, binding, etc....
+        // Using a DependencyProperty as the backing store for IsMinimized.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsMinimizedProperty =
             DependencyProperty.Register("IsMinimized", typeof(bool), typeof(AccordianGroupBoxControl), new PropertyMetadata(false));
 

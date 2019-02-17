@@ -5,31 +5,30 @@ using System.Runtime.Serialization;
 namespace MixItUp.Base.Model.Remote.Authentication
 {
     [DataContract]
-    public class RemoteConnectionAuthenticationTokenModel : RemoteConnectionModel
+    public class RemoteConnectionAuthenticationTokenModel : RemoteConnectionShortCodeModel
     {
         [DataMember]
         public string AccessToken { get; set; }
 
-        [JsonIgnore]
-        public bool IsHost { get; set; }
+        [DataMember]
+        public DateTimeOffset AccessTokenExpiration { get; set; }
 
         [JsonIgnore]
         public Guid GroupID { get; set; }
 
-        [DataMember]
-        public DateTimeOffset AccessTokenExpiration { get; set; }
+        [JsonIgnore]
+        public bool IsHost { get; set; }
 
         public RemoteConnectionAuthenticationTokenModel() { }
 
-        public RemoteConnectionAuthenticationTokenModel(RemoteConnectionModel device)
-            : base(device.Name)
+        public RemoteConnectionAuthenticationTokenModel(RemoteConnectionModel connection)
+            : base(connection.Name)
         {
-            this.ID = device.ID;
-
+            this.ID = connection.ID;
         }
 
-        public RemoteConnectionAuthenticationTokenModel(RemoteConnectionModel device, Guid groupID)
-            : this(device)
+        public RemoteConnectionAuthenticationTokenModel(RemoteConnectionModel connection, Guid groupID)
+            : this(connection)
         {
             this.GroupID = groupID;
         }

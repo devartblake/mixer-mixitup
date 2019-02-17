@@ -91,7 +91,7 @@ namespace MixItUp.Base.Actions
         {
             get
             {
-                return ChannelSession.AllCommands.Where(c => !string.IsNullOrEmpty(c.GroupName) && c.GroupName.Equals(this.GroupName));
+                return ChannelSession.AllCommands.Where(c =>  !string.IsNullOrEmpty(c.GroupName) && c.GroupName.Equals(this.GroupName));
             }
         }
 
