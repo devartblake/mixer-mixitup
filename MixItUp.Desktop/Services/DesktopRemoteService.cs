@@ -17,48 +17,67 @@ namespace MixItUp.Desktop.Services
     {
         public DesktopRemoteService(string apiAddress, string signalRAddress) : base(apiAddress, new SignalRConnection(signalRAddress)) { }
 
-        public override async Task InitializeConnection(RemoteConnectionAuthenticationTokenModel connection)
+        public override async Task<bool> InitializeConnection(RemoteConnectionAuthenticationTokenModel connection)
         {
             if (!this.IsConnected)
             {
-                this.ListenForRequestProfiles(async () =>
+                if (!await this.ValidateConnection(connection))
+                {
+                    return false;
+                }
+
+                this.AuthenticationToken = connection;
+
+                this.ListenForRequestProfiles(async (clientID) =>
                 {
                     try
                     {
-                        foreach(RemoteProfileBoardModel profileBoard in ChannelSession.Settings.RemoteProfiles.Values)
+                        RemoteConnectionModel clientConnection = ChannelSession.Settings.RemoteClientConnections.FirstOrDefault(c => c.ID.Equals(clientID));
+                        if (clientConnection != null)
                         {
-                            RemoteProfileBoardViewModel profileBoardViewModel = new RemoteProfileBoardViewModel(profileBoard);
-                            profileBoardViewModel.BuildHashValidation();
-                        }
-                        await this.SendProfiles(ChannelSession.Settings.RemoteProfiles.Values.Select(p => p.Profile));
+                            foreach (RemoteProfileBoardModel profileBoard in ChannelSession.Settings.RemoteProfiles.Values)
+                            {
+                                RemoteProfileBoardViewModel profileBoardViewModel = new RemoteProfileBoardViewModel(profileBoard);
+                                profileBoardViewModel.BuildHashValidation();
+                            }
+                            await this.SendProfiles(ChannelSession.Settings.RemoteProfiles.Values.Select(p => p.Profile));
+                        }                        
                     }
                     catch (Exception ex) { Logger.Log(ex); }
                 });
 
-                this.ListenForRequestProfileBoard(async (profileID) =>
+                this.ListenForRequestProfileBoard(async (clientID, profileID) =>
                 {
                     try
                     {
-                        if (ChannelSession.Settings.RemoteProfiles.ContainsKey(profileID))
+                        RemoteConnectionModel clientConnection = ChannelSession.Settings.RemoteClientConnections.FirstOrDefault(c => c.ID.Equals(clientID));
+                        if (clientConnection != null)
                         {
-                            await this.SendProfileBoard(ChannelSession.Settings.RemoteProfiles[profileID]);
-                        }
-                        else
-                        {
-                            await this.SendProfileBoard(null);
+                            if (ChannelSession.Settings.RemoteProfiles.ContainsKey(profileID))
+                            {
+                                await this.SendProfileBoard(ChannelSession.Settings.RemoteProfiles[profileID]);
+                            }
+                            else
+                            {
+                                await this.SendProfileBoard(null);
+                            }
                         }
                     }
                     catch (Exception ex) { Logger.Log(ex); }
                 });
 
-                this.ListenForSendCommand(async (commandID) =>
+                this.ListenForSendCommand(async (clientID, commandID) =>
                 {
                     try
                     {
-                        CommandBase command = ChannelSession.AllEnabledCommands.FirstOrDefault(c => c.ID.Equals(commandID));
-                        if (command != null)
+                        RemoteConnectionModel clientConnection = ChannelSession.Settings.RemoteClientConnections.FirstOrDefault(c => c.ID.Equals(clientID));
+                        if (clientConnection != null)
                         {
-                            await command.Perform();
+                            CommandBase command = ChannelSession.AllEnabledCommands.FirstOrDefault(c => c.ID.Equals(commandID));
+                            if (command != null)
+                            {
+                                await command.Perform();
+                            }
                         }
                     }
                     catch (Exception ex) { Logger.Log(ex); }
@@ -66,19 +85,18 @@ namespace MixItUp.Desktop.Services
 
                 await this.Connect();
                 await this.Authenticate(connection.ID, ChannelSession.SecretManager.GetSecret("RemoteHostSecret"), connection.AccessToken);
-                await Task.Delay(2000);
+                await Task.Delay(3000);
+
+                return this.IsConnected;
             }
+            return true;
         }
 
         public override async Task<RemoteConnectionAuthenticationTokenModel> NewHost(string name)
         {
             return await this.AsyncWrapper<RemoteConnectionAuthenticationTokenModel>(async () =>
             {
-                using (HttpClient httpClient = this.GetHttpClient())
-                {
-                    HttpResponseMessage response = await httpClient.GetAsync("authentication/newhost?name=" + name);
-                    return SerializerHelper.DeserializeFromString<RemoteConnectionAuthenticationTokenModel>(await response.Content.ReadAsStringAsync());
-                }
+                return await this.GetAsync<RemoteConnectionAuthenticationTokenModel>("authentication/newhost?name=" + name);
             });
         }
 
@@ -90,11 +108,16 @@ namespace MixItUp.Desktop.Services
         {
             return await this.AsyncWrapper<RemoteConnectionAuthenticationTokenModel>(async () =>
             {
-                using (HttpClient httpClient = this.GetHttpClient())
-                {
-                    HttpResponseMessage response = await httpClient.GetAsync(string.Format("authentication/approveclient?hostID={0}&shortCode={1}&rememberClient={2}", connection.ID, clientShortCode, rememberClient));
-                    return SerializerHelper.DeserializeFromString<RemoteConnectionAuthenticationTokenModel>(await response.Content.ReadAsStringAsync());
-                }
+                return await this.GetAsync<RemoteConnectionAuthenticationTokenModel>(string.Format("authentication/approveclient?hostID={0}&shortCode={1}&rememberClient={2}", connection.ID, clientShortCode, rememberClient));
+            });
+        }
+
+        public override async Task<bool> ValidateConnection(RemoteConnectionAuthenticationTokenModel authToken)
+        {
+            return await this.AsyncWrapper<bool>(async () =>
+            {
+                HttpResponseMessage response = await this.PostAsync("authentication/validateconnection", this.CreateContentFromObject(authToken));
+                return response.IsSuccessStatusCode;
             });
         }
 
@@ -102,11 +125,7 @@ namespace MixItUp.Desktop.Services
         {
             return await this.AsyncWrapper<bool>(async () =>
             {
-                using (HttpClient httpClient = this.GetHttpClient())
-                {
-                    HttpResponseMessage response = await httpClient.GetAsync(string.Format("authentication/removeclient?hostID={0}&clientID={1}", hostConnection.ID, clientConnection.ID));
-                    return SerializerHelper.DeserializeFromString<bool>(await response.Content.ReadAsStringAsync());
-                }
+                return await this.GetAsync<bool>(string.Format("authentication/removeclient?hostID={0}&clientID={1}", hostConnection.ID, clientConnection.ID));
             });
         }
     }

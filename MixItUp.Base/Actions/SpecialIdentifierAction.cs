@@ -12,7 +12,6 @@ namespace MixItUp.Base.Actions
     [DataContract]
     public class SpecialIdentifierAction : ActionBase
     {
-        private static Random random = new Random();
         private static SemaphoreSlim asyncSemaphore = new SemaphoreSlim(1);
 
         protected override SemaphoreSlim AsyncSemaphore { get { return SpecialIdentifierAction.asyncSemaphore; } }
