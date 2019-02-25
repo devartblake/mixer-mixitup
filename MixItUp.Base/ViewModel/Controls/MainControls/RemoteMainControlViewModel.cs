@@ -1,8 +1,10 @@
-﻿using MixItUp.Base.Remote.Models;
+﻿using MixItUp.Base.Model.Remote.Authentication;
+using MixItUp.Base.Remote.Models;
 using MixItUp.Base.Util;
 using MixItUp.Base.ViewModel.Remote;
 using MixItUp.Base.ViewModel.Remote.Items;
 using MixItUp.Base.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -68,6 +70,7 @@ namespace MixItUp.Base.ViewModel.Controls.MainControls
 
         public ICommand AddProfileCommand { get; private set; }
         public ICommand DeleteProfileCommand { get; private set; }
+        public ICommand ConnectDeviceCommand { get; private set; }
 
         public RemoteMainControlViewModel()
         {
@@ -103,7 +106,52 @@ namespace MixItUp.Base.ViewModel.Controls.MainControls
                 }
             });
 
-            MessageCenter.Register<RemoteCommandItemViewModel>(RemoteCommandItemViewModel.NewRemoteCommandEventName, (command) =>
+            this.ConnectDeviceCommand = this.CreateCommand(async (parameter) =>
+            {
+                if (ChannelSession.Settings.RemoteHostConnection == null)
+                {
+                    ChannelSession.Settings.RemoteHostConnection = await ChannelSession.Services.RemoteService.NewHost(ChannelSession.User.username);
+                }
+
+                if (ChannelSession.Settings.RemoteHostConnection != null)
+                {
+                    if (!ChannelSession.Services.RemoteService.IsConnected)
+                    {
+                        await ChannelSession.Services.RemoteService.InitializeConnection(ChannelSession.Settings.RemoteHostConnection);
+                    }
+
+                    string shortCode = await DialogHelper.ShowTextEntry("Device 6-Digit Code:");
+                    if (!string.IsNullOrEmpty(shortCode))
+                    {
+                        if (shortCode.Length != 6)
+                        {
+                            await DialogHelper.ShowMessage("The code entered is not valid");
+                            return;
+                        }
+
+                        RemoteConnectionModel clientConnection = await ChannelSession.Services.RemoteService.ApproveClient(ChannelSession.Settings.RemoteHostConnection, shortCode, rememberClient: true);
+                        if (clientConnection != null)
+                        {
+                            if (!clientConnection.IsTemporary)
+                            {
+                                ChannelSession.Settings.RemoteClientConnections.Add(clientConnection);
+                            }
+                            await DialogHelper.ShowMessage(string.Format("The client device {0} has been approved", clientConnection.Name));
+                        }
+                        else
+                        {
+                            await DialogHelper.ShowMessage("A client device could not be found with the specified code");
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    await DialogHelper.ShowMessage("Could not connect to Remote service, please try again");
+                }
+            });
+
+            MessageCenter.Register<RemoteCommandItemViewModel>(RemoteCommandItemViewModel.NewRemoteCommandEventName, this, (command) =>
             {
                 if (this.Board != null)
                 {
@@ -112,8 +160,14 @@ namespace MixItUp.Base.ViewModel.Controls.MainControls
                 }
             });
 
-            MessageCenter.Register<RemoteFolderItemViewModel>(RemoteFolderItemViewModel.NewRemoteFolderEventName, (folder) =>
+            MessageCenter.Register<RemoteFolderItemViewModel>(RemoteFolderItemViewModel.NewRemoteFolderEventName, this, async (folder) =>
             {
+                if (this.NavigationNames.Count() > 2)
+                {
+                    await DialogHelper.ShowMessage("Boards can only be up to 2 layers deep");
+                    return;
+                }
+
                 if (this.Board != null)
                 {
                     this.Board.AddItem(folder);
@@ -121,27 +175,33 @@ namespace MixItUp.Base.ViewModel.Controls.MainControls
                 }
             });
 
-            MessageCenter.Register<RemoteCommandItemViewModel>(RemoteCommandItemViewModel.RemoteCommandDetailsEventName, (command) =>
+            MessageCenter.Register<RemoteCommandItemViewModel>(RemoteCommandItemViewModel.RemoteCommandDetailsEventName, this, (command) =>
             {
                 this.Item = command;
             });
 
-            MessageCenter.Register<RemoteFolderItemViewModel>(RemoteFolderItemViewModel.RemoteFolderDetailsEventName, (folder) =>
+            MessageCenter.Register<RemoteFolderItemViewModel>(RemoteFolderItemViewModel.RemoteFolderDetailsEventName, this, (folder) =>
             {
                 this.Item = folder;
             });
 
-            MessageCenter.Register<RemoteFolderItemViewModel>(RemoteFolderItemViewModel.RemoteFolderNavigationEventName, (folder) =>
+            MessageCenter.Register<RemoteFolderItemViewModel>(RemoteFolderItemViewModel.RemoteFolderNavigationEventName, this, (folder) =>
             {
                 this.Board = new RemoteBoardViewModel(folder.Board.GetModel(), this.Board);
                 this.AddRemoveNavigationName(folder.Name);
                 this.Item = null;
             });
 
-            MessageCenter.Register<RemoteBoardViewModel>(RemoteBackItemViewModel.RemoteBackNavigationEventName, (board) =>
+            MessageCenter.Register<RemoteBoardViewModel>(RemoteBackItemViewModel.RemoteBackNavigationEventName, this, (board) =>
             {
                 this.Board = board;
                 this.AddRemoveNavigationName(null);
+                this.Item = null;
+            });
+
+            MessageCenter.Register<RemoteItemViewModelBase>(RemoteItemViewModelBase.RemoteDeleteItemEventName, this, (item) =>
+            {
+                this.Board.RemoveItem(item.XPosition, item.YPosition);
                 this.Item = null;
             });
         }

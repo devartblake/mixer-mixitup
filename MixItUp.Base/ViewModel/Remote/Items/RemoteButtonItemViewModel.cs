@@ -1,13 +1,15 @@
 ﻿using MixItUp.Base.Remote.Models.Items;
 using MixItUp.Base.Util;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MixItUp.Base.ViewModel.Remote.Items
 {
     public abstract class RemoteButtonItemViewModelBase : RemoteItemViewModelBase
     {
+        public const int BackgroundImageResizeValue = 120;
+
         private new RemoteButtonItemModelBase model;
 
         public RemoteButtonItemViewModelBase(RemoteButtonItemModelBase model)
@@ -15,14 +17,18 @@ namespace MixItUp.Base.ViewModel.Remote.Items
         {
             this.model = model;
 
-            this.BackgroundImageBrowseCommand = this.CreateCommand((parameter) =>
+            this.BackgroundImageBrowseCommand = this.CreateCommand(async(parameter) =>
             {
                 string filePath = ChannelSession.Services.FileService.ShowOpenFileDialog(ChannelSession.Services.FileService.ImageFileFilter());
-                if (!string.IsNullOrEmpty(filePath))
+                if (!string.IsNullOrEmpty(filePath) && ChannelSession.Services.FileService.FileExists(filePath))
                 {
                     this.BackgroundImage = filePath;
+
+                    var imageData = await ChannelSession.Services.FileService.ReadFileAsBytes(filePath);
+                    imageData = await ChannelSession.Services.ImageManipulationService.Resize(imageData, BackgroundImageResizeValue, BackgroundImageResizeValue);
+
+                    this.BackgroundImageData = Convert.ToBase64String(imageData);
                 }
-                return Task.FromResult(0);
             });
         }
 
@@ -71,6 +77,16 @@ namespace MixItUp.Base.ViewModel.Remote.Items
                 this.NotifyPropertyChanged();
                 this.NotifyPropertyChanged("HasBackgroundImage");
                 this.NotifyPropertyChanged("DoesNotHaveBackgroundImage");
+            }
+        }
+
+        public string BackgroundImageData
+        {
+            get { return this.model.ImageData; }
+            set
+            {
+                this.model.ImageData = value;
+                this.NotifyPropertyChanged();
             }
         }
 
