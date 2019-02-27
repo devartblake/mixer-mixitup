@@ -912,6 +912,7 @@
     <Compile Include="Util\MessageBoxHelper.cs" />
     <Compile Include="Util\SingleInstance.cs" />
     <Compile Include="Util\VisualTreeHelpers.cs" />
+    <Compile Include="Util\WPFDialogShower.cs" />
     <Compile Include="Windows\Command\CommandWindow.xaml.cs">
       <DependentUpon>CommandWindow.xaml</DependentUpon>
     </Compile>
