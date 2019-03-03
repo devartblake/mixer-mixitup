@@ -12,7 +12,9 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace MixItUp.WPF
 {
@@ -36,7 +38,7 @@ namespace MixItUp.WPF
 
             if (App.AppSettings.Width > 0)
             {
-                this.WindowStartupLocation = WindowStartupLocation.Manual;
+                this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 this.Height = App.AppSettings.Height;
                 this.Width = App.AppSettings.Width;
                 this.Top = App.AppSettings.Top;
@@ -46,7 +48,7 @@ namespace MixItUp.WPF
                 {
                     WindowState = WindowState.Maximized;
                 }
-            }
+            }            
         }
 
         public void Restart()

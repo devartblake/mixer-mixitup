@@ -14,7 +14,9 @@ namespace MixItUp.Base.Model.Interactive
 
         public static readonly InteractiveSharedProjectModel FlySwatter = new InteractiveSharedProjectModel(295410, 301323, "5b11a82j");
 
-        public static readonly List<InteractiveSharedProjectModel> AllMixPlayProjects = new List<InteractiveSharedProjectModel>() { FortniteDropMap, PUBGDropMap, RealmRoyaleDropMap, BlackOps4DropMap, ApexLegendsDropMap, MixerPaint, FlySwatter };
+        public static readonly InteractiveSharedProjectModel _2048 = new InteractiveSharedProjectModel(274990, 333546, "333546");
+
+        public static readonly List<InteractiveSharedProjectModel> AllMixPlayProjects = new List<InteractiveSharedProjectModel>() { FortniteDropMap, PUBGDropMap, RealmRoyaleDropMap, BlackOps4DropMap, ApexLegendsDropMap, MixerPaint, FlySwatter, _2048 };
 
         public uint GameID { get; set; }
         public uint VersionID { get; set; }

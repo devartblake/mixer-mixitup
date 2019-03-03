@@ -30,8 +30,83 @@
                 <Separator/>
                 <MenuItem x:Name="UserInformationMenuItem" Header="User Info" Click="UserInformationMenuItem_Click" />
             </ContextMenu>
+            <DataTemplate x:Key="ParticipantsDataTemplate">
+                <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource MaterialDesignDivider}"
+                    Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}"
+                    Height="50" Margin="-2,0,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle x:Name="ParticipantRct" Fill="{DynamicResource PrimaryHueMidBrush}"
+                                   Visibility="Hidden"/>
+                        <!--Pic-->
+                        <Grid Grid.Column="1" Margin="6" SnapsToDevicePixels="True">
+                            <Grid.OpacityMask>
+                                <VisualBrush Visual="{Binding ElementName=ClipEllipse}"/>
+                            </Grid.OpacityMask>
+                            <Ellipse x:Name="ClipEllipse" Fill="White"/>
+                            <MaterialDesign:PackIcon Kind="AccountCircle" SnapsToDevicePixels="True" Width="Auto" Height="Auto"
+                                                     Margin="-4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            <Image Source="{Binding Photo, Converter={StaticResource ByteBmpSrcConverter},
+                                TargetNullValue={StaticResource BlankImage}}" Stretch="UniformToFill"/>
+                        </Grid>
+                        <!--Name-->
+                        <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                   Margin="5,0" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                   Text="{Binding Name}" SnapsToDevicePixels="True"/>
 
-        </ResourceDictionary>
+                        <!--New Message icon-->
+                        <MaterialDesign:PackIcon Name="NewMessageIcon" Grid.Column="3" SnapsToDevicePixels="True"
+                                                 VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                 Kind="MessageReplyText" Opacity="0.7" Visibility="Hidden"/>
+                        <!--Typing icon-->
+                        <MaterialDesign:PackIcon Name="TypingIcon" Grid.Column="3" SnapsToDevicePixels="True"
+                                                 VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                 Kind="Feather" Opacity="0.8" Visibility="Hidden"/>
+
+                        <!--Online-->
+                        <Ellipse Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                 Width="8" Height="8">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="#F44336"/>
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding DataContext.IsConnected, 
+                                                    RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" Value="True"/>
+                                                <Condition Binding="{Binding IsLoggedIn}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Fill" Value="#64DD17"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
+                    </Grid>
+                </Border>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding HasSentNewMessage}" Value="True">
+                        <Setter TargetName="NewMessageIcon" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsTyping}" Value="True">
+                        <Setter TargetName="NewMessageIcon" Property="Visibility" Value="Hidden"/>
+                        <Setter TargetName="TypingIcon" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsSelected,
+                        RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}}" Value="true">
+                        <Setter Property="Visibility" TargetName="ParticipantRct" Value="Visible"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+        </ResourceDictionary>        
     </local:MainControlBase.Resources>
 
     <Grid>
@@ -145,7 +220,10 @@
 
                 <GridSplitter x:Name="ChatSplitter" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" />
 
-                <ListView x:Name="UserList" Grid.Column="2" VirtualizingPanel.VirtualizationMode="Recycling" ScrollViewer.IsDeferredScrollingEnabled="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalContentAlignment="Stretch" SelectionChanged="UserList_SelectionChanged" Width="200" />
+                <Border Grid.Column="2" BorderThickness="0,0,1,0" SnapsToDevicePixels="True" BorderBrush="{DynamicResource MaterialDesignDivider}">
+                    <ListBox x:Name="UserList" Grid.Column="2" ItemTemplate="{DynamicResource ParticipantsDataTemplate}" ItemContainerStyle="{DynamicResource ParticipantsListBoxItemStyle}"
+                     SelectedItem="{Binding SelectedParticipant}" VirtualizingPanel.VirtualizationMode="Recycling" ScrollViewer.IsDeferredScrollingEnabled="True" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalContentAlignment="Stretch" SelectionChanged="UserList_SelectionChanged" Width="200" />
+                </Border>
             </Grid>
 
         </GroupBox>
