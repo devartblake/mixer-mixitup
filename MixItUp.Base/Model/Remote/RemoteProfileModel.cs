@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace MixItUp.Base.Remote.Models
@@ -13,8 +14,8 @@ namespace MixItUp.Base.Remote.Models
         public string Name { get; set; }
 
         [DataMember]
-        public string HashValidation { get; set; }
-
+        public bool IsStreamer { get; set; }
+        
         public RemoteProfileModel() { }
 
         public RemoteProfileModel(string name)
@@ -26,20 +27,21 @@ namespace MixItUp.Base.Remote.Models
     }
 
     [DataContract]
-    public class RemoteProfileBoardModel
+    public class RemoteProfileBoardsModel
     {
         [DataMember]
-        public RemoteProfileModel Profile { get; set; }
+        public Guid ProfileID { get; set; }
 
         [DataMember]
-        public RemoteBoardModel Board { get; set; }
+        public Dictionary<Guid, RemoteBoardModel> Boards { get; set; } = new Dictionary<Guid, RemoteBoardModel>();
 
-        public RemoteProfileBoardModel() { }
+        public RemoteProfileBoardsModel() { }
 
-        public RemoteProfileBoardModel(RemoteProfileModel profile)
+        public RemoteProfileBoardsModel(Guid profileID)
+            : base()
         {
-            this.Profile = profile;
-            this.Board = new RemoteBoardModel();
+            this.ProfileID = profileID;
+            this.Boards[Guid.Empty] = new RemoteBoardModel();
         }
     }
 }

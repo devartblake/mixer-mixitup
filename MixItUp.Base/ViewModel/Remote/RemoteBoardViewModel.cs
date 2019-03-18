@@ -1,13 +1,17 @@
 ﻿using MixItUp.Base.Remote.Models;
 using MixItUp.Base.Remote.Models.Items;
+using MixItUp.Base.Util;
 using MixItUp.Base.ViewModel.Remote.Items;
 using MixItUp.Base.ViewModels;
 using System;
+using System.Collections.Generic;
 
 namespace MixItUp.Base.ViewModel.Remote
 {
     public class RemoteBoardViewModel : ModelViewModelBase<RemoteBoardModel>
     {
+        public const int BackgroundImageMaxPathLength = 300;
+
         protected RemoteItemViewModelBase[,] items = new RemoteItemViewModelBase[RemoteBoardModel.BoardWidth, RemoteBoardModel.BoardHeight];
 
         public RemoteBoardViewModel(RemoteBoardModel model) : this(model, null) { }
@@ -22,6 +26,8 @@ namespace MixItUp.Base.ViewModel.Remote
 
         public RemoteBoardViewModel ParentBoard { get; private set; }
 
+        public IEnumerable<string> PreDefinedColors { get { return ColorSchemes.WPFColorSchemeDictionary; } }
+
         public string BackgroundColor
         {
             get
@@ -35,7 +41,24 @@ namespace MixItUp.Base.ViewModel.Remote
             set { this.model.BackgroundColor = value; }
         }
 
-        public string BackgroundImage { get { return this.model.ImagePath; } }
+        public string BackgroundImage
+        {
+            get { return this.model.ImagePath; }
+            set
+            {
+                if (!string.IsNullOrEmpty(value) && value.Length > BackgroundImageMaxPathLength)
+                {
+                    value = value.Substring(0, BackgroundImageMaxPathLength);
+                }
+                this.model.ImagePath = value;
+                this.NotifyPropertyChanged();
+                this.NotifyPropertyChanged("HasBackgroundImage");
+                this.NotifyPropertyChanged("DoesNotHaveBackgroundImage");
+            }
+        }
+
+        public bool HasBackgroundImage { get { return !string.IsNullOrEmpty(this.BackgroundImage); } }
+        public bool DoesNotHaveBackgroundImage { get { return !this.HasBackgroundImage; } }
 
         public RemoteItemViewModelBase Item00 { get { return this.items[0, 0]; } }
         public RemoteItemViewModelBase Item10 { get { return this.items[1, 0]; } }
@@ -73,6 +96,8 @@ namespace MixItUp.Base.ViewModel.Remote
             return null;
         }
 
+        public RemoteItemViewModelBase GetItem(int xPosition, int yPosition) { return this.items[xPosition, yPosition]; }
+
         public void RemoveItem(int xPosition, int yPosition)
         {
             this.model.SetItem(null, xPosition, yPosition);
@@ -108,7 +133,7 @@ namespace MixItUp.Base.ViewModel.Remote
 
             if (this.model.IsSubBoard)
             {
-                this.items[0, 0] = new RemoteBackItemViewModel(this.ParentBoard);
+                this.items[0, 0] = new RemoteBackItemViewModel();
             }
 
             for (int x = 0; x < 5; x++)

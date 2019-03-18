@@ -1,4 +1,5 @@
-﻿using MixItUp.WPF.Controls;
+﻿using MixItUp.Base.ViewModel.Window;
+using MixItUp.WPF.Controls;
 using MixItUp.WPF.Util;
 using System;
 using System.Threading.Tasks;
@@ -8,9 +9,17 @@ namespace MixItUp.WPF.Windows
 {
     public class LoadingWindowBase : Window
     {
+        public WindowViewModelBase ViewModel { get; private set; }
+
         private int asyncOperationCount = 0;
 
         private LoadingStatusBar statusBar;
+
+        public LoadingWindowBase(WindowViewModelBase viewModel)
+            : this()
+        {
+            this.DataContext = this.ViewModel = viewModel;
+        }
 
         public LoadingWindowBase()
         {
@@ -45,13 +54,32 @@ namespace MixItUp.WPF.Windows
             return result;
         }
 
-        protected virtual Task OnLoaded() { return Task.FromResult(0); }
-
         protected void ShowMainWindow(Window window)
         {
             Application.Current.MainWindow = window;
             window.Show();
         }
+
+        protected void StartAsyncOperation()
+        {
+            this.asyncOperationCount++;
+            this.IsEnabled = false;
+            this.statusBar.ShowProgressBar();
+        }
+
+        protected void EndAsyncOperation()
+        {
+            this.asyncOperationCount--;
+            if (this.asyncOperationCount == 0)
+            {
+                this.statusBar.HideProgressBar();
+                this.IsEnabled = true;
+            }
+        }
+
+        protected virtual Task OnLoaded() { return Task.FromResult(0); }
+
+        protected virtual Task OnClosing() { return Task.FromResult(0); }
 
         private async void LoadingWindowBase_Loaded(object sender, RoutedEventArgs e)
         {
@@ -60,9 +88,7 @@ namespace MixItUp.WPF.Windows
                 await this.OnLoaded();
             });
         }
-
-        protected virtual Task OnClosing() { return Task.FromResult(0); }
-
+        
         private async void LoadingWindowBase_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             await this.RunAsyncOperation(async () =>
@@ -77,21 +103,5 @@ namespace MixItUp.WPF.Windows
             WPFDialogShower.SetLastActiveWindow(this);
         }
 
-        private void StartAsyncOperation()
-        {
-            this.asyncOperationCount++;
-            this.IsEnabled = false;
-            this.statusBar.ShowProgressBar();
-        }
-
-        private void EndAsyncOperation()
-        {
-            this.asyncOperationCount--;
-            if (this.asyncOperationCount == 0)
-            {
-                this.statusBar.HideProgressBar();
-                this.IsEnabled = true;
-            }
-        }
     }
 }
