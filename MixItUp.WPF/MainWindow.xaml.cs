@@ -1,27 +1,35 @@
-﻿using MaterialDesignThemes.Wpf;
-using MixItUp.Base;
+﻿using MixItUp.Base;
 using MixItUp.Base.Services;
-using MixItUp.Base.Util;
+using MixItUp.Base.ViewModel.Window;
+using MixItUp.WPF.Controls.Errors;
 using MixItUp.WPF.Controls.MainControls;
 using MixItUp.WPF.Util;
+using MixItUp.WPF.Util.Logging;
 using MixItUp.WPF.Windows;
-using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
+#if(SQUIRREL)
+	using Squirrel;
+#endif
+using static System.Windows.Visibility;
+using Application = System.Windows.Application;
 
 namespace MixItUp.WPF
 {
     /// <summary>
     /// Interaction logic for StreamerWindow.xaml
     /// </summary>
-    public partial class MainWindow : LoadingWindowBase
+    public partial class MainWindow : LoadingWindowBase, INotifyPropertyChanged
     {
         public string RestoredSettingsFilePath = null;
 
@@ -30,11 +38,44 @@ namespace MixItUp.WPF
         private bool shutdownStarted = false;
         private bool shutdownComplete = false;
 
+        private MainWindowViewModel viewModel;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        internal virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #region Properties
+
+        private bool _initalized => Core.Initialized;
+        public bool ExitRequestedFromTray;
+
+        private double _heightChangeDueToSearchBox;
+        public const int SearchBoxHeight = 30;
+
+        #endregion
+
+        #region Constructor
+
         public MainWindow()
+            :base(new MainWindowViewModel())
         {
             InitializeComponent();
+
             this.Closing += MainWindow_Closing;
             this.Initialize(this.StatusBar);
+
+            this.viewModel = (MainWindowViewModel)this.ViewModel;
+            this.viewModel.StartLoadingOperationOccurred += (sender, args) =>
+            {
+                this.StartAsyncOperation();
+            };
+            this.viewModel.EndLoadingOperationOccurred += (sender, args) =>
+            {
+                this.EndAsyncOperation();
+            };
 
             if (App.AppSettings.Width > 0)
             {
@@ -51,6 +92,14 @@ namespace MixItUp.WPF
             }            
         }
 
+        private void MetroWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.HeightChanged)
+                _heightChangeDueToSearchBox = 0;
+        }
+
+        public Thickness TitleBarMargin => new Thickness(0, TitlebarHeight, 0, 0);
+
         public void Restart()
         {
             this.restartApplication = true;
@@ -62,6 +111,8 @@ namespace MixItUp.WPF
             ChannelSession.Settings.ReRunWizard = true;
             this.Restart();
         }
+
+        #endregion
 
         protected override async Task OnLoaded()
         {
@@ -180,8 +231,15 @@ namespace MixItUp.WPF
             }
         }
 
-        private async void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void MainWindow_Closing(object sender, CancelEventArgs e)
         {
+            if (!ExitRequestedFromTray && Config.Instance.CloseToTray)
+            {
+                MinimizeToTray();
+                e.Cancel = true;
+                return;
+            }
+
             this.Activate();
             if (!this.shutdownStarted)
             {
@@ -199,5 +257,49 @@ namespace MixItUp.WPF
                 e.Cancel = true;
             }
         }
+        #region General Methods
+
+        private void MinimizeToTray()
+        {
+            Core.TrayIcon.NotifyIcon.Visible = true;
+            Hide();
+            Visibility = Visibility.Collapsed;
+            ShowInTaskbar = false;
+        }
+
+        public void ActivateWindow()
+        {
+            try
+            {
+                Show();
+                ShowInTaskbar = true;
+                Activate();
+                WindowState = WindowState.Normal;
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex);
+            }
+        }
+
+        #endregion
+
+        #region Errors
+
+        public ObservableCollection<Error> Errors = ErrorsChangedEventManager.Errors;
+
+        public Visibility ErrorIconVisibility => ErrorManager.ErrorIconVisibility;
+
+        public string ErrorCount => ErrorManager.Errors.Count > 1 ? $"({ErrorManager.Errors.Count}" : "";
+
+        private void BtnErrors_OnClick(object sender, RoutedEventArgs e) => FlyoutErrors.IsOpen = !FlyoutErrors.IsOpen;
+        public void ErrorsPropertyChanged()
+        {
+            OnPropertyChanged(nameof(Errors));
+            OnPropertyChanged(nameof(ErrorIconVisibility));
+            OnPropertyChanged(nameof(ErrorCount));
+        }
+
+        #endregion
     }
 }

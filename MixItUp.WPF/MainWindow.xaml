@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:MixItUp.WPF"
         xmlns:Controls="clr-namespace:MixItUp.WPF.Controls"
         xmlns:MainControls="clr-namespace:MixItUp.WPF.Controls.MainControls"
+        xmlns:flyoutControls="clr-namespace:MixItUp.WPF.Controls.FlyoutControls"
         xmlns:Windows="clr-namespace:MixItUp.WPF.Windows"
         xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
@@ -17,7 +18,7 @@
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"   
 
         Icon="./Logo.ico"
-        Title="Mix It Up" MinWidth="650" MinHeight="500" Height="720" Width="1000">
+        Title="Mix It Up" MinWidth="650" MinHeight="500" Height="760" Width="1000">
     <Windows:LoadingWindowBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -27,7 +28,93 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Windows:LoadingWindowBase.Resources>
-
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl Margin="{Binding TitleBarMargin, RelativeSource={RelativeSource AncestorType=windows:MainWindow}}">
+            <Controls:Flyout x:Name="FlyoutWarnings" Position="Bottom" Panel.ZIndex="102" Width="auto" Height="auto">
+                <Controls:Flyout.HeaderTemplate>
+                    <DataTemplate/>
+                </Controls:Flyout.HeaderTemplate>
+                <flyoutControls:Warning x:Name="WarningFlyout" />
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutOptions" Position="Left" Panel.ZIndex="102" Header="{lex:Loc MainWindow_Flyout_Options_Header}"
+                         Width="600">
+                <flyoutControls:OptionsMain x:Name="Options"/>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutHelp" Position="Left" Panel.ZIndex="102" Header="{lex:Loc MainWindow_Flyout_Help_Header}"
+                         Width="{Binding Width, RelativeSource={RelativeSource AncestorType=windows:MainWindow}}">
+                <local:Help x:Name="Help" />
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutDeck" Position="Left" Panel.ZIndex="102" Width="250" Header="{lex:Loc MainWindow_Flyout_OpponentDeck_Header}">
+                <flyoutControls:DeckPanel x:Name="DeckFlyout" />
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutSortFilter" Header="{lex:Loc MainWindow_Flyout_SortFilter_Header}" Position="Right" Width="245" Height="auto" Panel.ZIndex="100">
+                <local:SortFilterDecks Width="auto" Height="auto" x:Name="SortFilterDecksFlyout" />
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutNotes" Header="{lex:Loc MainWindow_Flyout_Notes_Header}" Position="Right" Width="255" Height="auto"
+                         Panel.ZIndex="100">
+                <local:DeckNotes Width="auto" Height="auto" x:Name="DeckNotesEditor" Margin="3,0,0,0" />
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutMyDecksSetTags" Header="{lex:Loc MainWindow_Flyout_SetTags_Header}" Position="Right" Width="255"
+                         Height="auto" Panel.ZIndex="100">
+                <local:SortFilterDecks Width="auto" Height="auto" x:Name="TagControlEdit" />
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutErrors" Position="Top" Header="{lex:Loc MainWindow_Flyout_Errors_Header}">
+                <error:ErrorList DataContext="{Binding Errors, RelativeSource={RelativeSource AncestorType=windows:MainWindow}}" VerticalAlignment="Center" MaxHeight="400"/>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutUpdateNotes" Header="{lex:Loc MainWindow_Flyout_UpdateNotes_Header}" CloseButtonVisibility="Collapsed" Position="Left" Panel.ZIndex="1" Width="{Binding Width, RelativeSource={RelativeSource AncestorType=windows:MainWindow}}">
+                <flyoutControls:UpdateNotes x:Name="UpdateNotesControl"/>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutHsReplayNote" CloseButtonVisibility="Collapsed" Position="Left" Panel.ZIndex="0" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=windows:MainWindow}}">
+                <Controls:Flyout.HeaderTemplate>
+                    <DataTemplate/>
+                </Controls:Flyout.HeaderTemplate>
+                <flyoutControls:HsReplayInfo x:Name="HsReplayInfoFlyout"/>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutDeckImporting" Header="{lex:Loc MainWindow_Flyout_DeckImporting_Header}" Position="Left" Panel.ZIndex="1" Width="{Binding Width, RelativeSource={RelativeSource AncestorType=windows:MainWindow}}">
+                <Controls1:DeckImportingControl x:Name="DeckImportingFlyout"/>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutDeckEditor" Header="{lex:Loc MainWindow_Flyout_DeckEditor_Header}" Position="Left" Panel.ZIndex="1" Width="{Binding Width, RelativeSource={RelativeSource AncestorType=windows:MainWindow}}">
+                <deckEditor:DeckEditorView x:Name="DeckEditorFlyout" />
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutDeckScreenshot" Header="{lex:Loc MainWindow_Flyout_DeckScreenshot_Header}" Position="Right" Panel.ZIndex="1" Width="300">
+                <deckScreenshot:DeckScreenshotView x:Name="DeckScreenshotFlyout"/>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutDeckExport" Header="{lex:Loc MainWindow_Flyout_DeckExport_Header}" Position="Right" Panel.ZIndex="1" Width="550">
+                <deckExport:DeckExportView x:Name="DeckExportFlyout"/>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutDeckHistory" Header="{lex:Loc MainWindow_Flyout_VersionHistory_Header}" Position="Right" Panel.ZIndex="1" Width="245">
+                <deckHistory:DeckHistoryView x:Name="DeckHistoryFlyout"/>
+            </Controls:Flyout>
+            <Controls:Flyout x:Name="FlyoutStats" Position="Left" Panel.ZIndex="1" Width="{Binding Width, RelativeSource={RelativeSource AncestorType=windows:MainWindow}}">
+                <Controls:Flyout.HeaderTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <Button Click="ButtonCloseStatsFlyout_OnClick" DockPanel.Dock="Right" Width="40" Height="40" VerticalAlignment="Center" Style="{DynamicResource MetroCircleButtonStyle}">
+                                <Rectangle Width="20" Height="15">
+                                    <Rectangle.Fill>
+                                        <VisualBrush Visual="{StaticResource appbar_arrow_left_white}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Button>
+                            <Button Click="ButtonSwitchStatsToNewWindow_OnClick" BorderBrush="Transparent" Background="Transparent" VerticalAlignment="Center" Opacity="0.8" DockPanel.Dock="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <Rectangle Width="16" Height="16" Margin="0,0,10,0">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Visual="{StaticResource appbar_arrow_right_left_white}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <TextBlock Text="{lex:Loc MainWindow_Flyout_Stats_Move}" FontWeight="Normal" />
+                                </StackPanel>
+                            </Button>
+                            <TextBlock Text="{lex:Loc MainWindow_Flyout_Stats_Header}" Foreground="White" Margin="15,0" FontSize="{StaticResource FlyoutHeaderFontSize}" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                        </DockPanel>
+                    </DataTemplate>
+                </Controls:Flyout.HeaderTemplate>
+                <ContentControl Name="StatsFlyoutContentControl"/>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

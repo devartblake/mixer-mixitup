@@ -257,6 +257,7 @@
     <Reference Include="System.IO.Pipelines, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Pipelines.4.5.2\lib\netstandard2.0\System.IO.Pipelines.dll</HintPath>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
@@ -348,6 +349,12 @@
     <Reference Include="WpfAnimatedGif, Version=1.4.17.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WpfAnimatedGif.1.4.17\lib\net\WpfAnimatedGif.dll</HintPath>
     </Reference>
+    <Reference Include="WPFLocalizeExtension, Version=3.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFLocalizeExtension.3.3.1\lib\net452\WPFLocalizeExtension.dll</HintPath>
+    </Reference>
+    <Reference Include="XAMLMarkupExtensions, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XAMLMarkupExtensions.1.5.1\lib\net452\XAMLMarkupExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -358,6 +365,7 @@
       <Link>InstallerHelpers.cs</Link>
     </Compile>
     <Compile Include="ApplicationSettings.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Controls\AccordianGroupBoxControl.xaml.cs">
       <DependentUpon>AccordianGroupBoxControl.xaml</DependentUpon>
     </Compile>
@@ -935,6 +943,11 @@
       <DependentUpon>UserProfileAvatarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Core.cs" />
+    <Compile Include="Enums\ConfigWarning.cs" />
+    <Compile Include="Enums\DateFormat.cs" />
+    <Compile Include="Enums\Language.cs" />
+    <Compile Include="Enums\LocDescriptionAttribute.cs" />
+    <Compile Include="Enums\MetroTheme.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
@@ -951,8 +964,13 @@
     </Compile>
     <Compile Include="Util\AutoRefreshTime.cs" />
     <Compile Include="Util\AutoRefreshTimeInfo.cs" />
+    <Compile Include="Util\BackupManager.cs" />
+    <Compile Include="Util\Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Util\Extensions\ZipArchiveExtensions.cs" />
+    <Compile Include="Util\Helper.cs" />
     <Compile Include="Util\InstalledFonts.cs" />
     <Compile Include="Util\LocalizationConverter.cs" />
+    <Compile Include="Util\LocUtil.cs" />
     <Compile Include="Util\LogConfig\LogConfig.cs" />
     <Compile Include="Util\LogConfig\LogConfigConstants.cs" />
     <Compile Include="Util\LogConfig\LogConfigItem.cs" />
@@ -963,8 +981,11 @@
     <Compile Include="Util\LogicalTreeHelpers.cs" />
     <Compile Include="Util\MessageBoxHelper.cs" />
     <Compile Include="Util\SingleInstance.cs" />
+    <Compile Include="Util\Themes\ThemeManager.cs" />
+    <Compile Include="Util\Themes\Theme.cs" />
     <Compile Include="Util\VisualTreeHelpers.cs" />
     <Compile Include="Util\WPFDialogShower.cs" />
+    <Compile Include="Util\XmlManager.cs" />
     <Compile Include="Windows\Command\CommandWindow.xaml.cs">
       <DependentUpon>CommandWindow.xaml</DependentUpon>
     </Compile>
